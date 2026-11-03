@@ -1,0 +1,392 @@
+/* HVAC Design Studio — right-to-left Arabic layer.
+   Loaded after the active colour theme so it only changes direction,
+   typography and mirrored spacing. */
+
+:root {
+  --font-ui: "Segoe UI", Tahoma, "Noto Naskh Arabic", "Traditional Arabic", Arial, sans-serif;
+  --font-display: "Noto Naskh Arabic", "Segoe UI", Tahoma, "Traditional Arabic", Georgia, serif;
+}
+
+html,
+body,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+[data-testid="stSidebar"] {
+  direction: rtl;
+}
+
+[data-testid="stMain"] .block-container {
+  text-align: right;
+}
+
+/* Arabic does not use letter-spaced uppercase labels; keep words joined. */
+.module-label,
+.chapter,
+.section-kicker,
+.kpi-label,
+.card-chapter,
+.card-result span,
+.side-label,
+.side-snapshot .snap-label,
+.overview-aside .aside-label,
+.info-tile .tile-label,
+.data-table thead th,
+[data-testid="stWidgetLabel"] p {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.module-hero h1,
+.overview-hero h1,
+.section-head h2,
+.panel-title b,
+.kpi-value,
+.module-card h3 {
+  letter-spacing: 0 !important;
+}
+
+.module-hero h1 em,
+.overview-hero h1 em {
+  font-style: normal;
+}
+
+p,
+li,
+label,
+[data-testid="stMarkdownContainer"] {
+  line-height: 1.75;
+}
+
+/* ---------- Sidebar and navigation ---------- */
+
+.side-brand {
+  direction: rtl;
+}
+
+.side-sub {
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.side-label {
+  padding-left: 0;
+  padding-right: 0.4rem;
+}
+
+[data-testid="stSidebar"] [role="radiogroup"] label p {
+  letter-spacing: 0;
+}
+
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+  text-align: right;
+}
+
+.side-snapshot {
+  direction: rtl;
+}
+
+.side-snapshot .snap-value small {
+  letter-spacing: 0;
+}
+
+[data-testid="stSidebar"] [data-baseweb="select"] > div {
+  direction: rtl;
+}
+
+/* ---------- Heroes and decorations ---------- */
+
+.module-hero::before {
+  right: auto;
+  left: 1.2rem;
+}
+
+.module-hero::after {
+  right: auto;
+  left: -90px;
+}
+
+.overview-hero::before {
+  right: auto;
+  left: -100px;
+}
+
+.overview-aside .aside-load span {
+  margin-left: 0;
+  margin-right: 0.3rem;
+}
+
+/* ---------- Cards, chips, callouts ---------- */
+
+.kpi::before {
+  left: auto;
+  right: 0;
+}
+
+.kpi-value .kpi-unit {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+.module-card,
+.kpi,
+.chip,
+.callout,
+.process-step,
+.info-tile {
+  text-align: right;
+}
+
+.callout {
+  grid-template-columns: minmax(0, 1fr) 4px;
+}
+
+.callout::before {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.callout > div {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.section-head .section-rule {
+  background: linear-gradient(270deg, var(--line-strong), transparent);
+}
+
+.process-arrow {
+  transform: rotate(180deg);
+}
+
+.status-pill {
+  direction: rtl;
+}
+
+/* ---------- Inputs and tabs ---------- */
+
+[data-testid="stWidgetLabel"] p,
+[data-testid="stCaptionContainer"] p {
+  text-align: right;
+}
+
+[data-baseweb="input"] > div,
+[data-baseweb="select"] > div,
+[data-baseweb="base-input"],
+.stTextInput input {
+  direction: rtl;
+  text-align: right;
+}
+
+.stNumberInput input {
+  direction: ltr;
+  text-align: right;
+}
+
+[data-testid="stMain"] [role="radiogroup"],
+.stTabs [data-baseweb="tab-list"] {
+  direction: rtl;
+}
+
+/* BaseWeb positions slider thumbs with physical left offsets; inheriting RTL
+   pushes the thumb and its value bubble outside the widget.  Keep the track
+   LTR and restore RTL only for the label row. */
+[data-testid="stSlider"] {
+  direction: ltr;
+}
+
+[data-testid="stSlider"] [data-testid="stWidgetLabel"] {
+  direction: rtl;
+}
+
+.stTabs [data-baseweb="tab"] {
+  letter-spacing: 0;
+}
+
+.stButton button p,
+.stDownloadButton button p {
+  letter-spacing: 0;
+}
+
+/* ---------- Tables ---------- */
+
+.data-table {
+  direction: rtl;
+}
+
+.data-table thead th {
+  text-align: right;
+}
+
+.data-table tbody td {
+  text-align: right;
+}
+
+.data-table td.num {
+  direction: ltr;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
+/* ---------- Code, formulas, charts and identifiers stay LTR ---------- */
+
+pre,
+code,
+kbd,
+samp,
+.stCodeBlock,
+[data-testid="stLatex"],
+.katex,
+.katex-display,
+.formula-note code,
+[data-testid="stPlotlyChart"],
+.js-plotly-plot,
+.plotly {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate;
+}
+
+.formula-note {
+  border-left: 0;
+  border-right: 2px solid rgba(15, 118, 110, 0.35);
+  border-radius: 10px 0 0 10px;
+  text-align: left;
+}
+
+.formula-note p {
+  text-align: left;
+}
+
+/* Keep thermophysical symbols and file names readable inside Arabic prose. */
+.snap-case b,
+.data-table td[dir="ltr"],
+.footer-credit {
+  unicode-bidi: isolate;
+}
+
+.page-footer {
+  text-align: right;
+}
+
+/* ---------- Streamlit chrome ---------- */
+
+[data-testid="stHeader"] {
+  direction: ltr;
+}
+
+/* Streamlit hides a closed sidebar by translating it 256px to the left,
+   which assumes the rail lives on the left edge.  Mirrored to the right,
+   that same offset parks a 1px dark sliver across the page content, so send
+   the collapsed rail fully past the right edge instead. */
+[data-testid="stSidebar"][aria-expanded="false"] {
+  transform: translateX(100vw) !important;
+  border-right: 0 !important;
+}
+
+/* Mirror the two header controls: app menu on the left, drawer opener on
+   the right, next to the sidebar it opens. */
+[data-testid="stMainMenu"] {
+  position: fixed !important;
+  top: 1rem;
+  right: auto !important;
+  left: 1.25rem;
+}
+
+[data-testid="stExpandSidebarButton"] {
+  position: fixed !important;
+  top: 1rem;
+  left: auto !important;
+  right: 1.25rem;
+}
+
+/* The chevrons are physical glyphs; point them toward the mirrored edges. */
+[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"],
+[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+  transform: scaleX(-1);
+}
+
+[data-baseweb="popover"] {
+  direction: rtl;
+}
+
+[data-testid="stAlert"] {
+  text-align: right;
+}
+
+[data-testid="stExpander"] summary {
+  text-align: right;
+}
+
+[data-testid="stTooltipContent"],
+[data-baseweb="tooltip"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* ---------- Quick design & simulation ---------- */
+
+.rec-eyebrow,
+.rec-family,
+.rec-specs span,
+.scene-phase,
+.scene-temps span {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.recommend-card,
+.rec-why,
+.rec-watch,
+.rec-specs {
+  text-align: right;
+}
+
+.rec-badge,
+.rec-badge b,
+.rec-badge small {
+  letter-spacing: 0;
+}
+
+.rec-columns ul {
+  padding-inline-start: 0;
+  padding-inline-end: 0;
+  list-style: none;
+}
+
+/* The native inside marker follows the physical left edge in Streamlit's
+   markdown container; draw the Arabic bullet explicitly on the right. */
+.rec-columns li {
+  position: relative;
+  padding-right: 1.05rem;
+}
+
+.rec-columns li::before {
+  content: "•";
+  position: absolute;
+  right: 0;
+  color: rgba(15, 118, 110, 0.75);
+}
+
+.rec-watch li::before {
+  color: rgba(201, 138, 34, 0.9);
+}
+
+.day-scene::after {
+  background: linear-gradient(270deg, rgba(8, 22, 20, 0.24), transparent 46%);
+}
+
+.phase-night::after {
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.35), transparent 50%);
+}
+
+.scene-time-row,
+.scene-time,
+.scene-temps b {
+  unicode-bidi: isolate;
+}
+
+.scene-time-row {
+  direction: ltr;
+  justify-content: flex-end;
+}
+

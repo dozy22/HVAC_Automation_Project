@@ -1,0 +1,501 @@
+/* HVAC Design Studio — dark drawing-board theme.
+   Loaded after style.css when the visitor enables dark mode. */
+
+:root {
+  --ink: #e6f0ec;
+  --ink-soft: #c4d8d0;
+  --muted: #9bb2aa;
+  --paper: #0b1614;
+  --paper-strong: #101f1c;
+  --card: #14231f;
+  --line: rgba(211, 236, 227, 0.11);
+  --line-strong: rgba(211, 236, 227, 0.2);
+  --teal: #4ec8b8;
+  --teal-deep: #7adccd;
+  --mint: #1b3a34;
+  --mint-soft: #17312c;
+  --ochre: #e0ad50;
+  --ochre-soft: #3a2e19;
+  --terra: #e58b68;
+  --blue: #82b7da;
+  --violet: #b096d8;
+  --green: #79bf91;
+}
+
+html,
+body,
+[data-testid="stAppViewContainer"] {
+  color: var(--ink);
+  background-color: var(--paper);
+}
+
+.stApp {
+  background:
+    radial-gradient(1100px 500px at 88% -8%, rgba(27, 94, 82, 0.34), transparent 62%),
+    radial-gradient(760px 440px at -5% 38%, rgba(120, 87, 31, 0.13), transparent 65%),
+    var(--paper);
+}
+
+[data-testid="stHeader"] {
+  background: rgba(11, 22, 20, 0.76);
+  border-bottom: 1px solid rgba(211, 236, 227, 0.06);
+}
+
+[data-testid="stToolbar"] * {
+  color: var(--muted);
+}
+
+h1, h2, h3, h4 {
+  color: var(--ink);
+}
+
+a {
+  color: var(--teal-deep);
+}
+
+/* ---------- Sidebar ---------- */
+
+[data-testid="stSidebar"] {
+  background:
+    radial-gradient(400px 300px at 10% 0%, rgba(43, 104, 91, 0.46), transparent 70%),
+    #071311;
+  border-right: 1px solid rgba(211, 236, 227, 0.07);
+}
+
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+  color: #c7d8d1 !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="select"] > div {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="select"] * {
+  color: #e8efe9 !important;
+}
+
+[data-testid="stSidebar"] [data-baseweb="select"] svg {
+  fill: #b9cec6 !important;
+}
+
+[data-testid="stSidebar"] [data-testid="stCheckbox"] input[type="checkbox"] {
+  accent-color: var(--teal);
+}
+
+.side-snapshot {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.side-credit {
+  color: #e0ad50;
+}
+
+/* Language dropdown portal */
+[data-baseweb="popover"] [role="listbox"],
+[data-baseweb="popover"] ul {
+  background: #14231f !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line-strong);
+}
+
+[data-baseweb="popover"] li,
+[data-baseweb="popover"] [role="option"] {
+  background: #14231f !important;
+  color: var(--ink) !important;
+}
+
+[data-baseweb="popover"] li:hover,
+[data-baseweb="popover"] [role="option"]:hover,
+[data-baseweb="popover"] [aria-selected="true"] {
+  background: rgba(78, 200, 184, 0.16) !important;
+}
+
+/* ---------- Heroes already use the dark brand; deepen the edges ---------- */
+
+.module-hero,
+.overview-hero {
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+}
+
+.overview-aside {
+  background: rgba(4, 13, 11, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ---------- Cards and panels ---------- */
+
+.kpi {
+  background: linear-gradient(160deg, rgba(23, 40, 36, 0.96), rgba(16, 29, 26, 0.92));
+  border-color: var(--line);
+  box-shadow: 0 9px 24px rgba(0, 0, 0, 0.24);
+}
+
+.kpi-value {
+  color: var(--ink);
+}
+
+.module-card {
+  background: linear-gradient(165deg, rgba(24, 42, 38, 0.97), rgba(15, 28, 25, 0.9));
+  border-color: var(--line);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+}
+
+.module-card:hover {
+  border-color: rgba(78, 200, 184, 0.35);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.36);
+}
+
+.module-card .card-result {
+  color: var(--ink-soft);
+}
+
+.chip {
+  background: rgba(24, 41, 37, 0.9);
+  border-color: var(--line);
+  color: var(--muted);
+}
+
+.chip b {
+  color: var(--ink-soft);
+}
+
+.chip--teal {
+  background: rgba(30, 70, 62, 0.62);
+  border-color: rgba(78, 200, 184, 0.22);
+}
+
+.chip--ochre {
+  background: rgba(62, 50, 26, 0.62);
+  border-color: rgba(224, 173, 80, 0.25);
+}
+
+.callout {
+  background: rgba(21, 36, 32, 0.84);
+  border-color: var(--line);
+}
+
+.callout.ochre {
+  background: rgba(58, 46, 25, 0.45);
+}
+
+.callout.terra {
+  background: rgba(62, 37, 29, 0.42);
+}
+
+.callout h4 {
+  color: var(--ink-soft);
+}
+
+.process-rail {
+  background: rgba(21, 37, 33, 0.74);
+  border-color: var(--line);
+}
+
+.process-step {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(211, 236, 227, 0.08);
+}
+
+.process-arrow {
+  color: rgba(122, 220, 205, 0.65);
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] {
+  border-color: var(--line);
+  background: rgba(20, 35, 31, 0.68);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+.info-tile {
+  background: rgba(22, 38, 34, 0.66);
+  border-color: var(--line);
+}
+
+.info-tile .tile-label {
+  color: var(--teal-deep);
+}
+
+/* ---------- Tables ---------- */
+
+.data-table-wrap {
+  background: rgba(18, 32, 29, 0.86);
+  border-color: var(--line);
+}
+
+.data-table thead th {
+  background: #172924;
+  color: var(--muted);
+  border-bottom-color: var(--line-strong);
+}
+
+.data-table tbody td {
+  color: var(--ink-soft);
+  border-top-color: var(--line);
+}
+
+.data-table tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.022);
+}
+
+.data-table tbody tr:hover td {
+  background: rgba(78, 200, 184, 0.09);
+}
+
+/* ---------- Inputs, tabs, buttons ---------- */
+
+[data-baseweb="input"],
+[data-baseweb="base-input"],
+[data-baseweb="input"] > div,
+[data-baseweb="select"] > div,
+.stNumberInput input {
+  background: rgba(255, 255, 255, 0.055) !important;
+  border-color: var(--line-strong) !important;
+  color: var(--ink) !important;
+}
+
+/* The BaseWeb input shell ships with an opaque light background and the
+   stepper buttons inherit it; both need an explicit dark surface. */
+[data-baseweb="input"] {
+  background-color: rgba(255, 255, 255, 0.055) !important;
+}
+
+[data-testid="stNumberInputStepDown"],
+[data-testid="stNumberInputStepUp"],
+.stNumberInput button {
+  background-color: rgba(255, 255, 255, 0.075) !important;
+  border-color: var(--line-strong) !important;
+  color: var(--ink-soft) !important;
+}
+
+[data-testid="stNumberInputStepDown"]:hover,
+[data-testid="stNumberInputStepUp"]:hover,
+.stNumberInput button:hover {
+  background-color: rgba(78, 200, 184, 0.16) !important;
+  color: var(--teal-deep) !important;
+}
+
+[data-testid="stNumberInputStepDown"] svg,
+[data-testid="stNumberInputStepUp"] svg,
+.stNumberInput button svg {
+  fill: var(--ink-soft) !important;
+  color: var(--ink-soft) !important;
+}
+
+[data-testid="stMain"] [data-testid="stWidgetLabel"] p {
+  color: var(--ink-soft) !important;
+}
+
+[data-testid="stCaptionContainer"] p {
+  color: var(--muted) !important;
+}
+
+.stTextInput input,
+.stNumberInput input {
+  color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important;
+}
+
+.stNumberInput input:disabled,
+.stTextInput input:disabled {
+  color: var(--ink-soft) !important;
+  -webkit-text-fill-color: var(--ink-soft) !important;
+}
+
+[data-baseweb="input"]:has(input:disabled) {
+  background: rgba(255, 255, 255, 0.035) !important;
+}
+
+[data-baseweb="select"] > div:hover,
+[data-baseweb="input"] > div:hover {
+  border-color: rgba(122, 220, 205, 0.5) !important;
+}
+
+[data-testid="stSlider"] [role="slider"] {
+  background: var(--teal) !important;
+  box-shadow: 0 0 0 4px rgba(78, 200, 184, 0.16) !important;
+}
+
+[data-testid="stExpander"] {
+  background: rgba(21, 36, 32, 0.55);
+  border-color: var(--line);
+}
+
+[data-testid="stExpander"] summary {
+  color: var(--ink-soft);
+}
+
+[data-testid="stMain"] [role="radiogroup"] {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(211, 236, 227, 0.08);
+}
+
+[data-testid="stMain"] [role="radiogroup"] label:has(input:checked) {
+  background: rgba(78, 200, 184, 0.17);
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.28);
+}
+
+[data-testid="stMain"] [role="radiogroup"] label:has(input:checked) p {
+  color: var(--ink);
+}
+
+.stTabs [data-baseweb="tab-list"] {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(211, 236, 227, 0.08);
+}
+
+.stTabs [aria-selected="true"] {
+  background: rgba(78, 200, 184, 0.18) !important;
+  color: var(--ink) !important;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.26);
+}
+
+.stButton button,
+.stDownloadButton button {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: var(--line-strong);
+  color: var(--ink-soft);
+}
+
+.stButton button:hover,
+.stDownloadButton button:hover {
+  background: rgba(78, 200, 184, 0.14);
+  border-color: rgba(122, 220, 205, 0.45);
+  color: var(--teal-deep);
+}
+
+.stButton button[kind="primary"],
+.stButton button[data-testid="stBaseButton-primary"] {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #06211d;
+}
+
+.stButton button[kind="primary"]:hover,
+.stButton button[data-testid="stBaseButton-primary"]:hover {
+  background: var(--teal-deep);
+  border-color: var(--teal-deep);
+  color: #041b17;
+}
+
+/* ---------- Charts, alerts, metrics ---------- */
+
+[data-testid="stPlotlyChart"] {
+  background: rgba(17, 30, 27, 0.7);
+  border-color: rgba(211, 236, 227, 0.08);
+}
+
+[data-testid="stAlert"] {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--line-strong);
+  color: var(--ink-soft);
+}
+
+[data-testid="stMetric"] {
+  background: rgba(21, 36, 32, 0.8);
+  border-color: var(--line);
+}
+
+[data-testid="stMetricLabel"] p {
+  color: var(--muted) !important;
+}
+
+[data-testid="stMetricValue"] {
+  color: var(--ink);
+}
+
+.formula-note {
+  border-left-color: rgba(78, 200, 184, 0.5);
+  background: rgba(255, 255, 255, 0.045);
+  color: var(--muted);
+}
+
+.formula-note b {
+  color: var(--ink-soft);
+}
+
+.page-footer {
+  border-top-color: var(--line);
+  color: var(--muted);
+}
+
+.footer-credit {
+  color: var(--ochre);
+}
+
+/* Streamlit's own small print and code blocks */
+code, pre, kbd, samp {
+  background: rgba(255, 255, 255, 0.055);
+  color: var(--ink-soft);
+}
+
+::selection {
+  background: rgba(78, 200, 184, 0.32);
+  color: #ffffff;
+}
+
+/* ---------- Quick design & simulation ---------- */
+
+.design-hero {
+  background:
+    radial-gradient(620px 320px at 92% 6%, rgba(224, 173, 80, 0.16), transparent 62%),
+    radial-gradient(520px 300px at 8% 108%, rgba(43, 104, 91, 0.46), transparent 68%),
+    linear-gradient(118deg, #081512 0%, #0e2621 55%, #143b32 100%);
+}
+
+.recommend-card {
+  background:
+    radial-gradient(560px 240px at 102% -10%, rgba(27, 94, 82, 0.34), transparent 62%),
+    var(--card);
+  border-color: var(--line);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+}
+
+.rec-eyebrow {
+  color: var(--teal-deep);
+}
+
+.rec-note,
+.rec-columns li {
+  color: var(--ink-soft);
+}
+
+.rec-specs > div {
+  background: var(--paper-strong);
+  border-color: var(--line);
+}
+
+.rec-specs b,
+.rec-columns h4 {
+  color: var(--ink);
+}
+
+.rec-why {
+  background: rgba(27, 58, 52, 0.62);
+  border-color: rgba(78, 200, 184, 0.16);
+}
+
+.rec-watch {
+  background: rgba(58, 46, 25, 0.58);
+  border-color: rgba(224, 173, 80, 0.2);
+}
+
+.rec-badge {
+  color: #f1f7f3;
+  background:
+    radial-gradient(160px 90px at 80% 0%, rgba(78, 200, 184, 0.28), transparent 70%),
+    linear-gradient(145deg, #071713, #123c33);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+}
+
+.day-scene {
+  border-color: var(--line-strong);
+  box-shadow: inset 0 -52px 78px rgba(0, 0, 0, 0.18), 0 16px 34px rgba(0, 0, 0, 0.22);
+}
+
+.scene-readout {
+  border-color: rgba(211, 236, 227, 0.24);
+  background: rgba(5, 18, 16, 0.74);
+}
+

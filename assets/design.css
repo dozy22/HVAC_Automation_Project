@@ -1,0 +1,535 @@
+/* HVAC Design Studio — quick design & simulation layer.
+   Loaded after the active colour theme and before the RTL layer. */
+
+/* ---------------- Hero ---------------- */
+
+.design-hero {
+  background:
+    radial-gradient(620px 320px at 92% 6%, rgba(224, 173, 80, 0.22), transparent 62%),
+    radial-gradient(520px 300px at 8% 108%, rgba(104, 168, 148, 0.34), transparent 68%),
+    linear-gradient(118deg, #102a25 0%, #17453a 55%, #246253 100%);
+}
+
+/* ---------------- Recommendation ---------------- */
+
+.recommend-card {
+  position: relative;
+  overflow: hidden;
+  margin: 0.45rem 0 1rem;
+  padding: 1.4rem 1.45rem 1.3rem;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background:
+    radial-gradient(560px 240px at 102% -10%, rgba(217, 238, 230, 0.7), transparent 62%),
+    var(--card);
+  box-shadow: 0 14px 34px rgba(19, 42, 39, 0.055);
+}
+
+.recommend-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.rec-eyebrow {
+  color: var(--teal);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.recommend-copy h3 {
+  margin: 0.3rem 0 0.15rem;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 1.95rem;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.rec-family {
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.rec-note {
+  max-width: 540px;
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.rec-badge {
+  flex: 0 0 auto;
+  min-width: 158px;
+  padding: 0.95rem 1.1rem 0.85rem;
+  border-radius: 16px;
+  color: #f8f3e3;
+  text-align: center;
+  background:
+    radial-gradient(160px 90px at 80% 0%, rgba(126, 197, 176, 0.34), transparent 70%),
+    linear-gradient(145deg, #0f332c, #1e5c4e);
+  box-shadow: 0 10px 24px rgba(15, 51, 44, 0.24);
+}
+
+.rec-badge b {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.rec-badge span {
+  display: block;
+  margin-top: 0.18rem;
+  color: #cfe6dd;
+  font-size: 0.63rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rec-badge small {
+  display: block;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f0d8a8;
+  font-size: 0.63rem;
+}
+
+.rec-specs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 1.15rem;
+}
+
+.rec-specs > div {
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--paper-strong);
+}
+
+.rec-specs span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.rec-specs b {
+  display: block;
+  margin-top: 0.22rem;
+  color: var(--ink);
+  font-size: 0.88rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.rec-columns {
+  display: grid;
+  grid-template-columns: 1.12fr 1fr;
+  gap: 0.8rem;
+  margin-top: 1.05rem;
+}
+
+.rec-why,
+.rec-watch {
+  padding: 0.85rem 0.95rem 0.55rem;
+  border-radius: 14px;
+}
+
+.rec-why {
+  background: rgba(217, 238, 230, 0.4);
+  border: 1px solid rgba(15, 118, 110, 0.13);
+}
+
+.rec-watch {
+  background: rgba(244, 230, 199, 0.4);
+  border: 1px solid rgba(201, 138, 34, 0.16);
+}
+
+.rec-columns h4 {
+  margin: 0 0 0.5rem;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.rec-columns ul {
+  margin: 0;
+  padding-inline-start: 1.05rem;
+}
+
+.rec-columns li {
+  margin-bottom: 0.42rem;
+  color: var(--ink-soft);
+  font-size: 0.77rem;
+  line-height: 1.55;
+}
+
+/* ---------------- Day scene ---------------- */
+
+.day-scene {
+  position: relative;
+  overflow: hidden;
+  min-height: 330px;
+  margin: 0.4rem 0 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #bcdbe4 0%, #e3eee2 58%, #f2e5cd 100%);
+  box-shadow: inset 0 -52px 78px rgba(117, 96, 55, 0.2), 0 16px 34px rgba(19, 42, 39, 0.07);
+  isolation: isolate;
+}
+
+.day-scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(8, 22, 20, 0.24), transparent 46%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.phase-dawn {
+  background: linear-gradient(180deg, #7596b4 0%, #e5b79a 48%, #f6ddb2 100%);
+}
+
+.phase-day {
+  background: linear-gradient(180deg, #8fc6da 0%, #cfe6e4 52%, #eee7cf 100%);
+}
+
+.phase-dusk {
+  background: linear-gradient(180deg, #4c5f7e 0%, #c98468 52%, #f0c88e 100%);
+}
+
+.phase-night {
+  background: linear-gradient(180deg, #071a26 0%, #0c2a34 55%, #163b3e 100%);
+  box-shadow: inset 0 -52px 78px rgba(0, 0, 0, 0.32), 0 16px 34px rgba(0, 0, 0, 0.2);
+}
+
+.phase-night::after {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent 50%);
+}
+
+.scene-orb {
+  position: absolute;
+  top: var(--orb-y, 24%);
+  left: var(--orb-x, 50%);
+  width: 62px;
+  height: 62px;
+  margin: -31px 0 0 -31px;
+  border-radius: 50%;
+  z-index: 0;
+  transition: left 0.4s ease, top 0.4s ease;
+}
+
+.orb-sun {
+  background: radial-gradient(circle at 40% 38%, #fff6d8, #ffd471 58%, #f2a93f 100%);
+  box-shadow: 0 0 34px 12px rgba(255, 208, 106, 0.55), 0 0 90px 34px rgba(255, 196, 82, 0.22);
+}
+
+.orb-moon {
+  background: radial-gradient(circle at 36% 34%, #fbf7e6, #d9dfd2 62%, #aab8b2 100%);
+  box-shadow: 0 0 26px 8px rgba(232, 240, 232, 0.28);
+}
+
+.scene-stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-image:
+    radial-gradient(1.4px 1.4px at 12% 18%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 26% 9%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.6px 1.6px at 38% 22%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.1px 1.1px at 55% 12%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 68% 26%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 82% 15%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.3px 1.3px at 91% 31%, #fdf7df 60%, transparent 100%),
+    radial-gradient(1.1px 1.1px at 47% 33%, #fdf7df 60%, transparent 100%);
+}
+
+.phase-night .scene-stars {
+  opacity: 0.85;
+}
+
+.scene-haze {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 54px;
+  height: 96px;
+  background: linear-gradient(180deg, transparent, rgba(247, 236, 208, 0.5));
+  z-index: 0;
+}
+
+.phase-night .scene-haze {
+  background: linear-gradient(180deg, transparent, rgba(52, 92, 92, 0.28));
+}
+
+.scene-city {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 62px;
+  height: 108px;
+  opacity: 0.5;
+  background: #5c7f80;
+  clip-path: polygon(
+    0 100%, 0 62%, 4% 62%, 4% 44%, 9% 44%, 9% 70%, 14% 70%, 14% 52%,
+    18% 52%, 18% 30%, 23% 30%, 23% 66%, 28% 66%, 28% 48%, 33% 48%,
+    33% 72%, 39% 72%, 39% 38%, 44% 38%, 44% 58%, 49% 58%, 49% 26%,
+    54% 26%, 54% 60%, 59% 60%, 59% 46%, 64% 46%, 64% 68%, 70% 68%,
+    70% 40%, 75% 40%, 75% 56%, 81% 56%, 81% 34%, 86% 34%, 86% 64%,
+    92% 64%, 92% 50%, 97% 50%, 97% 70%, 100% 70%, 100% 100%
+  );
+  z-index: 0;
+}
+
+.phase-night .scene-city {
+  opacity: 0.55;
+  background: #081817;
+}
+
+.scene-ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 66px;
+  background: linear-gradient(180deg, #35564c, #1f3934);
+  z-index: 1;
+}
+
+.phase-night .scene-ground {
+  background: linear-gradient(180deg, #0d2422, #071715);
+}
+
+.scene-building {
+  position: absolute;
+  bottom: 44px;
+  inset-inline-end: 5%;
+  width: 210px;
+  height: 186px;
+  z-index: 1;
+  filter: drop-shadow(0 18px 22px rgba(10, 30, 26, 0.28));
+}
+
+.scene-roof {
+  height: 12px;
+  margin: 0 10px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(90deg, #d9c9a3, #b8a479);
+}
+
+.scene-face {
+  position: relative;
+  height: 174px;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(160deg, #dfd3b5, #bfae8a);
+  border: 1px solid rgba(70, 60, 40, 0.25);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  padding-top: 26px;
+  gap: 4px;
+}
+
+.phase-night .scene-face {
+  background: linear-gradient(160deg, #2a3f3b, #1b2e2b);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.scene-window {
+  width: 26px;
+  height: 34px;
+  border-radius: 3px;
+  background: linear-gradient(160deg, #6f8f91, #4d6f72);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.16);
+}
+
+.scene-window.lit {
+  background: linear-gradient(160deg, #ffe6a3, #f2c766);
+  box-shadow: 0 0 14px rgba(255, 205, 96, 0.6), inset 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.scene-unit {
+  position: absolute;
+  bottom: 16px;
+  inset-inline-start: 18px;
+  width: 48px;
+  height: 30px;
+  border-radius: 4px;
+  background: linear-gradient(160deg, #f2eee2, #c9c3b2);
+  border: 1px solid rgba(50, 50, 40, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.phase-night .scene-unit {
+  background: linear-gradient(160deg, #cfd8d2, #9faeaa);
+}
+
+.scene-unit span {
+  width: 3px;
+  height: 16px;
+  border-radius: 2px;
+  background: rgba(50, 70, 64, 0.35);
+}
+
+.scene-unit.on span {
+  background: rgba(15, 118, 110, 0.8);
+  animation: scene-pulse 1.8s ease-in-out infinite;
+}
+
+.scene-unit.on span:nth-child(2) { animation-delay: 0.25s; }
+.scene-unit.on span:nth-child(3) { animation-delay: 0.5s; }
+
+@keyframes scene-pulse {
+  0%, 100% { opacity: 0.35; transform: translateY(1px); }
+  50% { opacity: 1; transform: translateY(-1px); }
+}
+
+.scene-readout {
+  position: absolute;
+  top: 1.2rem;
+  inset-inline-start: 1.3rem;
+  z-index: 3;
+  min-width: 232px;
+  max-width: 62%;
+  padding: 0.95rem 1.05rem 0.85rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(11, 30, 27, 0.62);
+  backdrop-filter: blur(10px);
+  color: #f2f7f2;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+.scene-time-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.scene-time {
+  font-family: var(--font-display);
+  font-size: 2.15rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #fdf8e8;
+}
+
+.scene-phase {
+  color: #b9d9cf;
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.scene-temps {
+  display: flex;
+  gap: 1.3rem;
+  margin-top: 0.65rem;
+}
+
+.scene-temps span {
+  display: block;
+  color: #9fc0b6;
+  font-size: 0.57rem;
+  font-weight: 650;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.scene-temps b {
+  display: block;
+  margin-top: 0.1rem;
+  color: #f7f2e1;
+  font-size: 1.02rem;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
+}
+
+.scene-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #cfe2da;
+  font-size: 0.66rem;
+  line-height: 1.4;
+}
+
+.scene-status i {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: #9db3ab;
+}
+
+.scene-status.ok i {
+  background: #74d3a1;
+  box-shadow: 0 0 8px rgba(116, 211, 161, 0.8);
+}
+
+.scene-status.warn i {
+  background: #e9b34f;
+  box-shadow: 0 0 8px rgba(233, 179, 79, 0.7);
+}
+
+.scene-status.idle i {
+  background: #8fa39c;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-unit.on span { animation: none; }
+  .scene-orb { transition: none; }
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 1100px) {
+  .rec-specs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .recommend-card { padding: 1.1rem 1.05rem 1rem; }
+  .recommend-copy h3 { font-size: 1.6rem; }
+  .rec-specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rec-columns { grid-template-columns: 1fr; }
+  .rec-badge { min-width: 0; width: 100%; }
+  .day-scene { min-height: 365px; }
+  .scene-readout {
+    max-width: calc(100% - 2rem);
+    min-width: 0;
+    inset-inline-start: 1rem;
+    right: 1rem;
+  }
+  .scene-building { width: 160px; height: 150px; inset-inline-end: 6%; bottom: 38px; }
+  .scene-face { height: 140px; padding-top: 20px; }
+  .scene-window { width: 20px; height: 26px; }
+  .scene-city { height: 84px; bottom: 54px; }
+}
