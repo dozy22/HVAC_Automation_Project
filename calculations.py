@@ -1,0 +1,102 @@
+"""Public calculation API for the HVAC Automation application.
+
+Import engineering functions from this module when integrating reports, tests,
+or future desktop shells.  The implementation is split into focused modules so
+each discipline can be reviewed independently.
+"""
+
+from hvac.psychrometrics import (
+    P_ATM_STD_KPA,
+    PsychrometricState,
+    dew_point_from_rh,
+    enthalpy_from_state,
+    humidity_ratio_from_rh,
+    psychrometric_state,
+    saturation_humidity_ratio,
+    saturation_pressure_kpa,
+    specific_volume,
+    wet_bulb_from_rh,
+)
+from hvac.thermal_loads import (
+    ACTIVITY_PROFILES,
+    GLAZING_OPTIONS,
+    ROOF_OPTIONS,
+    TR_KW,
+    WALL_OPTIONS,
+    LoadInputs,
+    LoadResult,
+    calculate_thermal_load,
+    default_load_inputs,
+)
+from hvac.ahu import (
+    AhuDesignResult,
+    HeatingHumidificationResult,
+    design_ahu,
+    find_apparatus_dew_point,
+    heating_and_steam_humidification,
+    mix_air,
+    supply_state_from_space_loads,
+)
+from hvac.refrigeration import (
+    REFRIGERANTS,
+    CycleInputs,
+    CycleResult,
+    compute_cycle,
+    sensitivity_sweep,
+)
+from hvac.controls import (
+    ACTUATOR_SUPPLY,
+    ACTUATOR_VALVE,
+    CONTROLLER_PID,
+    CONTROLLER_THRESHOLD,
+    ComfortLimits,
+    SimulationInputs,
+    SimulationResult,
+    controller_comparison,
+    effective_temperature_c,
+    simulate_control,
+)
+
+__all__ = [
+    "P_ATM_STD_KPA",
+    "PsychrometricState",
+    "dew_point_from_rh",
+    "enthalpy_from_state",
+    "humidity_ratio_from_rh",
+    "psychrometric_state",
+    "saturation_humidity_ratio",
+    "saturation_pressure_kpa",
+    "specific_volume",
+    "wet_bulb_from_rh",
+    "ACTIVITY_PROFILES",
+    "GLAZING_OPTIONS",
+    "ROOF_OPTIONS",
+    "WALL_OPTIONS",
+    "TR_KW",
+    "LoadInputs",
+    "LoadResult",
+    "calculate_thermal_load",
+    "default_load_inputs",
+    "AhuDesignResult",
+    "HeatingHumidificationResult",
+    "design_ahu",
+    "find_apparatus_dew_point",
+    "heating_and_steam_humidification",
+    "mix_air",
+    "supply_state_from_space_loads",
+    "REFRIGERANTS",
+    "CycleInputs",
+    "CycleResult",
+    "compute_cycle",
+    "sensitivity_sweep",
+    "ACTUATOR_SUPPLY",
+    "ACTUATOR_VALVE",
+    "CONTROLLER_PID",
+    "CONTROLLER_THRESHOLD",
+    "ComfortLimits",
+    "SimulationInputs",
+    "SimulationResult",
+    "controller_comparison",
+    "effective_temperature_c",
+    "simulate_control",
+]
