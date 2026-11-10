@@ -6,12 +6,169 @@
 
   var H = window.HVAC;
   if (!H) {
-    document.body.innerHTML = '<main style="padding:40px;font-family:sans-serif"><h1>تعذر تحميل المحرك</h1><p>تأكد من وجود ملف web/engine.js بجانب الصفحة.</p></main>';
+    var failedEn = document.documentElement.dataset.lang === 'en';
+    document.body.innerHTML = '<main style="padding:40px;font-family:sans-serif"><h1>' +
+      (failedEn ? 'Could not load the engine' : 'تعذر تحميل المحرك') + '</h1><p>' +
+      (failedEn ? 'Make sure web/engine.js sits next to the page.' : 'تأكد من وجود ملف web/engine.js بجانب الصفحة.') +
+      '</p></main>';
     return;
   }
 
   var $ = function (id) { return document.getElementById(id); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+
+  /* ================================================================== */
+  /* Language and plain-language help                                   */
+  /* ================================================================== */
+  var I18N = window.HVAC_I18N || { ar: {}, en: {} };
+  var HELP = window.HVAC_HELP || { ar: {}, en: {} };
+  var DATA = window.HVAC_DATA || { systems: {}, components: {}, presets: {}, errors: {} };
+  var LANG = document.documentElement.dataset.lang === 'en' ? 'en' : 'ar';
+
+  function t(key, vars) {
+    var table = I18N[LANG] || I18N.ar || {};
+    var s = table[key];
+    if (s == null) s = (I18N.ar && I18N.ar[key]);
+    if (s == null) s = key;
+    if (vars) {
+      Object.keys(vars).forEach(function (k) {
+        s = s.split('{' + k + '}').join(String(vars[k]));
+      });
+    }
+    return s;
+  }
+  function L(ar, en) {
+    if (LANG === 'en') return en == null ? ar : en;
+    return ar == null ? en : ar;
+  }
+  function hasHelp(key) { return !!(key && ((HELP.ar && HELP.ar[key]) || (HELP.en && HELP.en[key]))); }
+  function helpText(key) {
+    var h = HELP[LANG] || {};
+    return h[key] || (HELP.en && HELP.en[key]) || '';
+  }
+  function presetLabel(key, obj) {
+    if (LANG === 'ar') return (obj && obj.ar) || key;
+    var en = DATA.presets && DATA.presets[key];
+    return (en && en.en) || key;
+  }
+  function systemName(rec) {
+    if (!rec) return '';
+    return LANG === 'en' ? (rec.nameEn || rec.name) : rec.name;
+  }
+  function systemFamily(rec) {
+    if (!rec) return '';
+    var en = DATA.systems && DATA.systems[rec.key];
+    return LANG === 'en' ? ((en && en.en.family) || rec.family) : rec.family;
+  }
+  function systemNote(rec) {
+    if (!rec) return '';
+    var en = DATA.systems && DATA.systems[rec.key];
+    return LANG === 'en' ? ((en && en.en.note) || rec.note) : rec.note;
+  }
+  function cityLabel(city, key) {
+    if (!city) return key || '';
+    return LANG === 'en' ? (key || city.ar) : city.ar;
+  }
+  function errText(err) {
+    var msg = (err && err.message) ? err.message : String(err);
+    var key = DATA.errors && DATA.errors[msg];
+    return key ? t(key) : msg;
+  }
+  function componentName(name) {
+    var c = DATA.components && DATA.components[name];
+    return c ? L(c.ar, c.en) : name;
+  }
+  function basisText(text) {
+    if (LANG !== 'ar' || !text) return text;
+    return String(text)
+      .replace('Sol-air', 'هواء شمسي')
+      .replace('Connected equipment', 'أجهزة موصولة')
+      .replace('per person', 'لكل شخص')
+      .replace('people', 'أشخاص')
+      .replace('shading', 'تظليل')
+      .replace(' net ', ' صافي ')
+      .replace('roof', 'سقف');
+  }
+
+  function applyStaticI18n() {
+    $$('[data-i18n]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n');
+      var val = I18N[LANG] && I18N[LANG][key];
+      if (val == null) return;
+      var buttons = $$('.help-btn', el);
+      el.textContent = val;
+      buttons.forEach(function (b) { el.appendChild(b); });
+    });
+    $$('[data-i18n-html]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-html');
+      var val = I18N[LANG] && I18N[LANG][key];
+      if (val != null) el.innerHTML = val;
+    });
+    $$('[data-i18n-aria]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-aria');
+      var val = I18N[LANG] && I18N[LANG][key];
+      if (val != null) el.setAttribute('aria-label', val);
+    });
+    $$('[data-i18n-title]').forEach(function (el) {
+      var key = el.getAttribute('data-i18n-title');
+      var val = I18N[LANG] && I18N[LANG][key];
+      if (val != null) el.setAttribute('title', val);
+    });
+    var close = $('help-pop-close');
+    if (close) close.setAttribute('aria-label', t('a11y.close'));
+  }
+
+  function updateLangButton() {
+    var btn = $('lang-btn');
+    var label = $('lang-label');
+    if (label) label.textContent = LANG === 'ar' ? 'EN' : 'ع';
+    if (btn) {
+      btn.setAttribute('title', t('d.langSwitch'));
+      btn.setAttribute('aria-label', t('a11y.lang'));
+    }
+  }
+
+  function setLang(lang, persist) {
+    LANG = (lang === 'en') ? 'en' : 'ar';
+    var root = document.documentElement;
+    root.lang = LANG;
+    root.dir = LANG === 'ar' ? 'rtl' : 'ltr';
+    root.dataset.lang = LANG;
+    document.title = t('meta.title');
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute('content', t('meta.desc'));
+    if (persist !== false) {
+      try { localStorage.setItem('hvac-lang', LANG); } catch (e) {}
+    }
+    applyStaticI18n();
+    updateLangButton();
+    refillAllSelects();
+    try {
+      recalcQuick();
+      recalcLoads();
+      recalcAhu();
+      recalcCycle();
+      recalcControl();
+    } catch (e) {}
+    closeHelp();
+  }
+
+  function initLang() {
+    applyStaticI18n();
+    updateLangButton();
+    var btn = $('lang-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      setLang(LANG === 'ar' ? 'en' : 'ar', true);
+    });
+  }
+
+  function refillAllSelects() {
+    fillQuickSelects();
+    fillLoadSelects();
+    fillAhuSelects();
+    fillControlWeather();
+  }
 
   function fmt(x, d) {
     var n = Number(x);
@@ -73,6 +230,60 @@
       if (diff < bestDiff) { bestDiff = diff; best = key; }
     });
     return best;
+  }
+
+  /* Engine tables carry Arabic labels; the English key doubles as its label. */
+  function tableLabel(obj, key, suffix) {
+    var label = LANG === 'en' ? key : ((obj[key] && obj[key].ar) || key);
+    if (suffix) label += ' (' + suffix + ')';
+    return label;
+  }
+
+  function fillQuickSelects() {
+    var space = $('q-space'), city = $('q-city'), env = $('q-envelope');
+    fillSelect('q-space', Object.keys(H.SPACE_TYPES).map(function (k) {
+      return [k, tableLabel(H.SPACE_TYPES, k)];
+    }), (space && space.value) || 'Office');
+    fillSelect('q-city', Object.keys(H.CITIES).map(function (k) {
+      return [k, tableLabel(H.CITIES, k)];
+    }), (city && city.value) || 'Baghdad');
+    fillSelect('q-envelope', Object.keys(H.ENVELOPE_QUALITY).map(function (k) {
+      return [k, tableLabel(H.ENVELOPE_QUALITY, k)];
+    }), (env && env.value) || 'Standard');
+  }
+
+  function fillLoadSelects() {
+    fillSelect('l-wall', Object.keys(H.WALL_OPTIONS).map(function (k) {
+      return [k, tableLabel(H.WALL_OPTIONS, k, 'U ' + H.WALL_OPTIONS[k].u)];
+    }), ($('l-wall') && $('l-wall').value) || 'Brick + 50 mm insulation');
+    fillSelect('l-roof', Object.keys(H.ROOF_OPTIONS).map(function (k) {
+      return [k, tableLabel(H.ROOF_OPTIONS, k, 'U ' + H.ROOF_OPTIONS[k].u)];
+    }), ($('l-roof') && $('l-roof').value) || 'Concrete + 75 mm insulation');
+    fillSelect('l-glazing', Object.keys(H.GLAZING_OPTIONS).map(function (k) {
+      return [k, tableLabel(H.GLAZING_OPTIONS, k, 'U ' + H.GLAZING_OPTIONS[k].u)];
+    }), ($('l-glazing') && $('l-glazing').value) || 'Double low-e glass');
+    fillSelect('l-weather', Object.keys(H.WEATHER_PRESETS).map(function (k) {
+      return [k, presetLabel(k, H.WEATHER_PRESETS[k])];
+    }), ($('l-weather') && $('l-weather').value) || 'Hot dry example');
+    fillSelect('l-solar', Object.keys(H.WALL_SOLAR_OPTIONS).map(function (k) {
+      return [k, tableLabel(H.WALL_SOLAR_OPTIONS, k)];
+    }), ($('l-solar') && $('l-solar').value) || 'West facade (afternoon peak)');
+    fillSelect('l-activity', Object.keys(H.ACTIVITY_PROFILES).map(function (k) {
+      var p = H.ACTIVITY_PROFILES[k];
+      return [k, tableLabel(H.ACTIVITY_PROFILES, k) + ' · ' + p.sensible_w + '/' + p.latent_w + ' W'];
+    }), ($('l-activity') && $('l-activity').value) || 'Office work');
+  }
+
+  function fillAhuSelects() {
+    fillSelect('a-outpreset', Object.keys(H.WEATHER_PRESETS).map(function (k) {
+      return [k, presetLabel(k, H.WEATHER_PRESETS[k])];
+    }), ($('a-outpreset') && $('a-outpreset').value) || 'Hot dry example');
+  }
+
+  function fillControlWeather() {
+    fillSelect('k-weather', Object.keys(WEATHERS).map(function (k) {
+      return [k, LANG === 'en' ? k : WEATHERS[k].ar];
+    }), ($('k-weather') && $('k-weather').value) || 'Hot afternoon');
   }
 
   var state = {
@@ -160,9 +371,7 @@
   /* Quick design                                                      */
   /* ================================================================== */
   function initQuick() {
-    fillSelect('q-space', selectOptions(H.SPACE_TYPES, function (v) { return v.ar; }), 'Office');
-    fillSelect('q-city', selectOptions(H.CITIES, function (v) { return v.ar; }), 'Baghdad');
-    fillSelect('q-envelope', selectOptions(H.ENVELOPE_QUALITY, function (v) { return v.ar; }), 'Standard');
+    fillQuickSelects();
 
     var pairs = [
       ['q-area', 'q-area-range'],
@@ -203,7 +412,7 @@
     $('q-to-loads').addEventListener('click', transferQuickToLoads);
     $('q-to-cycle').addEventListener('click', function () {
       if (!state.quick) return;
-      transferLoadToCycle(state.quick.load.designTotal, 'تم نقل حمل التصميم السريع');
+      transferLoadToCycle(state.quick.load.designTotal, t('d.toast.quickCycle'));
     });
 
     recalcQuick();
@@ -236,7 +445,9 @@
     var space = H.SPACE_TYPES[inp.spaceType];
     var autoOcc = Math.max(1, Math.round(inp.floorArea / space.areaPerPerson));
     if (!$('q-manual').checked) $('q-occ').value = autoOcc;
-    $('q-occ-hint').textContent = $('q-manual').checked ? 'إشغال يدوي' : 'إشغال تلقائي · ' + autoOcc + ' شخص';
+    $('q-occ-hint').textContent = $('q-manual').checked
+      ? t('d.occ.manual')
+      : t('d.occ.auto', { n: autoOcc });
     $('q-custom-wrap').classList.toggle('show', inp.city === 'Other / custom');
     $('q-area-range').value = Math.min(1000, Math.max(10, inp.floorArea));
     $('q-glazing-range').value = num('q-glazing', 25);
@@ -246,15 +457,15 @@
     try {
       d = H.buildQuick(inp);
     } catch (err) {
-      setStatus('q-status', 'تحقق من المدخلات: ' + err.message, true);
+      setStatus('q-status', t('d.status.error', { msg: errText(err) }), true);
       return;
     }
     state.quick = d;
     var rec = d.rec;
 
-    setText('q-system-name', rec.name);
-    setText('q-family', rec.family);
-    setText('q-note', rec.note);
+    setText('q-system-name', systemName(rec));
+    setText('q-family', systemFamily(rec));
+    setText('q-note', systemNote(rec));
     setText('q-cap', fmt(rec.capacityKw, 1));
     setText('q-cap-tr', fmt(rec.capacityTr, 2));
     setText('q-load', fmt(d.load.designTotal, 1) + ' kW');
@@ -269,7 +480,7 @@
     setText('q-fresh', fmt0(rec.freshAir));
     setText('q-occ-count', fmt0(d.occupants));
     setText('q-outdb', fmt(d.outDb, 0));
-    setText('q-city-label', d.city.ar);
+    setText('q-city-label', cityLabel(d.city, d.inputs.city));
     setText('q-time', fmt(performance.now() - t0, 1) + ' ms');
 
     var denom = Math.max(rec.capacityKw, rec.targetKw, d.load.designTotal, 1e-6);
@@ -280,32 +491,31 @@
     setHTML('q-reasons', d.reasons.map(function (r) { return '<li>' + esc(reasonText(r)) + '</li>'; }).join(''));
     setHTML('q-cautions', d.cautions.map(function (c) { return '<li>' + esc(cautionText(c)) + '</li>'; }).join(''));
     setHTML('q-day-chart', renderDayChart(d.outDb, d.dailySwing));
-
-    setStatus('q-status', 'تم الحساب محلياً · آخر تحديث ' + nowClock());
+    setStatus('q-status', t('d.status.calc', { time: nowClock() }));
     updateOverview();
   }
 
   function reasonText(r) {
+    var q = fmt(r.q, 1), tr = fmt(r.tr, 2), pct = fmt(r.pct, 0);
     switch (r.code) {
       case 'peak':
-        return 'ذروة الحمل ' + fmt(r.q, 1) + ' kW (' + fmt(r.tr, 2) + ' TR)، والاختيار يغطيها بهامش ' +
-          fmt(r.margin, 0) + '% لفاقد المجاري وحرارة المروحة والتسامح الواقعي.';
+        return t('d.reason.peak', { q: q, tr: tr, margin: fmt(r.margin, 0) });
       case 'system-split':
-        return 'مكيف سبليت بمنطقة واحدة هو أبسط حل وأقلّه كلفة عند هذا الحجم؛ ظلّل الوحدة الخارجية وأبعد الداخلية عن الجلسات.';
+        return t('d.reason.split');
       case 'system-ducted':
-        return 'المساحة مفتوحة، لذلك يوزّع نظام المجاري الهواء بالتساوي ويمكنه جرّ مجرى هواء نقي إلى منطقة الإشغال.';
+        return t('d.reason.ducted');
       case 'system-vrf':
-        return 'عدة غرف ويوم تشغيل طويل يرجّحان VRF: وحدات داخلية منفصلة تتبع الإشغال، والكفاءة الجزئية تبقى عالية خارج الذروة.';
+        return t('d.reason.vrf');
       case 'system-chiller':
-        return 'عند هذه القدرة تصبح محطة ماء مبرد مركزية ووحدة AHU أكثر عملية وقابلية للصيانة من بنك كبير من وحدات DX.';
+        return t('d.reason.chiller');
       case 'latent-high':
-        return 'الحمل الكامن ' + fmt(r.pct, 0) + '% من الإجمالي، فاختر ملفاً يزيل الرطوبة فعلاً؛ وحدة جافة كبيرة الحجم ستترك المكان بارداً ورطباً.';
+        return t('d.reason.latentHigh', { pct: pct });
       case 'latent-low':
-        return 'الحمل محسوس بنسبة كبيرة (' + fmt(r.pct, 0) + '% كامن)، لذلك القدرة المحسوسة وتدفق الهواء هما الحاكمان لا إزالة الرطوبة.';
+        return t('d.reason.latentLow', { pct: pct });
       case 'wwr':
-        return 'الزجاج ' + fmt(r.pct, 0) + '% من الجدار المعرّض، فالكسب الشمسي مسيطر؛ زجاج Low-E أو تظليل خارجي يشتري راحة أكثر من قدرة إضافية.';
+        return t('d.reason.wwr', { pct: pct });
       case 'west':
-        return 'النافذة الرئيسية غربية، فذروة الشمس في العصر حين يكون الهواء الخارجي أسخن أصلاً. تلك هي الساعة التي يجب أن ينتصر فيها النظام.';
+        return t('d.reason.west');
       default:
         return '';
     }
@@ -313,11 +523,11 @@
   function cautionText(c) {
     switch (c.code) {
       case 'fresh':
-        return 'الهواء النقي ' + fmt0(c.oa) + ' m³/h. أكّد جدول التهوية والعادم مع مستخدمي المكان.';
+        return t('d.caution.fresh', { oa: fmt0(c.oa) });
       case 'condenser':
-        return 'أبقِ الوحدة الخارجية مظللة وبعيدة عن الجدران؛ المكثف الساخن قد يفقد 10% من قدرته في أسوأ وقت.';
+        return t('d.caution.condenser');
       default:
-        return 'هذا تقدير تصميمي. يجب أن يراجع مهندس مؤهل اختيار المعدات النهائي مقابل متطلبات المشروع والكود المحلي.';
+        return t('d.disclaimer');
     }
   }
 
@@ -326,10 +536,19 @@
     var d = state.quick;
     setText('ov-load', fmt(d.load.designTotal, 1));
     setText('ov-tr', fmt(d.load.designTr, 2));
-    setText('ov-system', d.rec.name);
+    setText('ov-system', systemName(d.rec));
     setText('ov-cap', fmt(d.rec.capacityKw, 0));
     setText('ov-area', fmt0(d.inputs.floorArea));
     setText('ov-cop', fmt(state.cycle ? state.cycle.cop : 3.98, 2));
+    setText('ov-tag-city', cityLabel(d.city, d.inputs.city));
+    var orientKey = d.inputs.orientation;
+    var orientAr = { North: 'شمالية', East: 'شرقية', South: 'جنوبية', West: 'غربية' };
+    setText('ov-tag-orient', LANG === 'en'
+      ? orientKey + ' facade'
+      : 'واجهة ' + (orientAr[orientKey] || ''));
+    setText('ov-tag-glazing', LANG === 'en'
+      ? 'Glazing ' + fmt(d.inputs.glazing * 100, 0) + '%'
+      : 'زجاج \u200E' + fmt(d.inputs.glazing * 100, 0) + '%');
   }
 
   function renderDayChart(peakDb, swing) {
@@ -340,8 +559,8 @@
     var sy = function (t) { return mt + (hi - t) / (hi - lo) * (H - mt - mb); };
     var pts = [];
     for (var h = 0; h <= 24; h += 0.5) {
-      var t = peakDb - swing / 2 + swing / 2 * Math.cos(2 * Math.PI * (h - 15) / 24);
-      pts.push([sx(h), sy(t)]);
+      var temp = peakDb - swing / 2 + swing / 2 * Math.cos(2 * Math.PI * (h - 15) / 24);
+      pts.push([sx(h), sy(temp)]);
     }
     var area = pathFrom(pts) + ' L' + sx(24) + ' ' + sy(lo) + ' L' + sx(0) + ' ' + sy(lo) + ' Z';
     var inner = '<defs><linearGradient id="dayGrad" x1="0" y1="0" x2="0" y2="1">' +
@@ -359,29 +578,14 @@
       inner += '<text x="' + sx(h) + '" y="' + (H - 6) + '" text-anchor="middle">' + ('0' + h).slice(-2) + ':00</text>';
     });
     inner += '<text x="' + (ml - 6) + '" y="' + (mt + 6) + '" text-anchor="end" class="axis-label">°C</text>';
-    return svgWrap(W, H, inner, 'حرارة يوم التصميم على مدار 24 ساعة');
+    return svgWrap(W, H, inner, t('q.day.aria'));
   }
 
   /* ================================================================== */
   /* Detailed cooling loads                                            */
   /* ================================================================== */
   function initLoads() {
-    fillSelect('l-wall', selectOptions(H.WALL_OPTIONS, function (v) {
-      return v.ar + ' (U ' + v.u + ')';
-    }), 'Brick + 50 mm insulation');
-    fillSelect('l-roof', selectOptions(H.ROOF_OPTIONS, function (v) {
-      return v.ar + ' (U ' + v.u + ')';
-    }), 'Concrete + 75 mm insulation');
-    fillSelect('l-glazing', selectOptions(H.GLAZING_OPTIONS, function (v) {
-      return v.ar + ' (U ' + v.u + ')';
-    }), 'Double low-e glass');
-    fillSelect('l-weather', selectOptions(H.WEATHER_PRESETS, function (v) {
-      return v.ar;
-    }), 'Hot dry example');
-    fillSelect('l-solar', selectOptions(H.WALL_SOLAR_OPTIONS, function (v) { return v.ar; }), 'West facade (afternoon peak)');
-    fillSelect('l-activity', selectOptions(H.ACTIVITY_PROFILES, function (v) {
-      return v.ar + ' · ' + v.sensible_w + '/' + v.latent_w + ' W';
-    }), 'Office work');
+    fillLoadSelects();
 
     $('l-wall').addEventListener('change', function () {
       var v = H.WALL_OPTIONS[this.value];
@@ -420,12 +624,12 @@
     $('l-reset').addEventListener('click', function () {
       resetLoadsForm();
       recalcLoads();
-      toast('تمت استعادة القيم الافتراضية');
+      toast(t('d.toast.resetLoads'));
     });
     $('l-to-ahu').addEventListener('click', transferLoadToAhu);
     $('l-to-cycle').addEventListener('click', function () {
       if (!state.load) return;
-      transferLoadToCycle(state.load.designTotal, 'تم نقل حمل التبريد إلى الدورة');
+      transferLoadToCycle(state.load.designTotal, t('d.toast.loadCycle'));
     });
 
     recalcLoads();
@@ -495,20 +699,6 @@
     };
   }
 
-  var COMPONENT_AR = {
-    'Wall conduction': 'توصيل الجدار',
-    'Roof conduction': 'توصيل السقف',
-    'Window conduction': 'توصيل الزجاج',
-    'Window solar transmission': 'كسب شمسي عبر الزجاج',
-    'Occupants, sensible': 'الأشخاص — محسوس',
-    'Occupants, latent': 'الأشخاص — كامن',
-    'Lighting': 'الإضاءة',
-    'Equipment': 'الأجهزة',
-    'Infiltration, sensible': 'تسرب — محسوس',
-    'Infiltration, latent': 'تسرب — كامن',
-    'Outdoor ventilation, sensible': 'تهوية خارجية — محسوس',
-    'Outdoor ventilation, latent': 'تهوية خارجية — كامن'
-  };
   var CAT_COLOR = {
     Envelope: 'var(--accent)',
     Solar: 'var(--amber)',
@@ -523,7 +713,7 @@
     try {
       l = H.calcLoad(readLoads());
     } catch (err) {
-      setStatus('l-status', 'تحقق من المدخلات: ' + err.message, true);
+      setStatus('l-status', t('d.status.error', { msg: errText(err) }), true);
       return;
     }
     state.load = l;
@@ -545,19 +735,19 @@
 
     renderLoadTable(l);
     setHTML('l-notes', l.notes.map(function (note) {
-      return '<li>' + esc(loadNoteAr(note)) + '</li>';
+      return '<li>' + esc(loadNote(note)) + '</li>';
     }).join(''));
 
-    setStatus('l-status', 'حُسب في ' + fmt(performance.now() - t0, 1) + ' ms · ' + nowClock());
+    setStatus('l-status', t('d.status.ms', { ms: fmt(performance.now() - t0, 1), time: nowClock() }));
     updateOverview();
   }
 
-  function loadNoteAr(note) {
-    if (note.indexOf('sol-air') !== -1) return 'تقدير الذروة يستخدم درجة حرارة هواء شمسية ثابتة للأسطح المعتمة.';
-    if (note.indexOf('RSHF') !== -1) return 'RSHF يعتمد على أحمال الغرفة فقط؛ يُضاف حمل التهوية لحمل الملف.';
-    if (note.indexOf('Fan power') !== -1) return 'لا تشمل الأحمال قدرة المراوح ولا فاقد المجاري ولا التخزين الحراري للغلاف.';
-    if (note.indexOf('Window-to-wall') !== -1) return 'نسبة الزجاج عالية؛ راجع الكسب الشمسي والتصميم الضوئي.';
-    if (note.indexOf('drier') !== -1) return 'الهواء الخارجي أجف من الغرفة، لذا يكون الحمل الكامن للتهوية سالباً.';
+  function loadNote(note) {
+    if (note.indexOf('sol-air') !== -1) return t('d.note.solair');
+    if (note.indexOf('RSHF') !== -1) return t('d.note.rshf');
+    if (note.indexOf('Fan power') !== -1) return t('d.note.fan');
+    if (note.indexOf('Window-to-wall') !== -1) return t('d.note.wwr');
+    if (note.indexOf('drier') !== -1) return t('d.note.drier');
     return note;
   }
 
@@ -568,16 +758,16 @@
       var color = CAT_COLOR[c.category] || 'var(--accent)';
       var bar = Math.min(100, Math.abs(c.total) / maxQ * 100).toFixed(1);
       var scope = c.scope === 'Room'
-        ? '<span class="scope-badge room">الغرفة</span>'
-        : '<span class="scope-badge outdoor">هواء خارجي</span>';
+        ? '<span class="scope-badge room">' + t('d.scope.room') + '</span>'
+        : '<span class="scope-badge outdoor">' + t('d.scope.out') + '</span>';
       return '<tr>' +
-        '<td><div class="item-cell"><strong>' + esc(COMPONENT_AR[c.name] || c.name) + '</strong>' +
+        '<td><div class="item-cell"><strong>' + esc(componentName(c.name)) + '</strong>' +
         '<span>' + scope + '</span>' +
         '<div class="mini-bar"><i style="width:' + bar + '%;background:' + color + '"></i></div></div></td>' +
         '<td class="num">' + (c.sensible ? fmt(c.sensible, 2) : '—') + '</td>' +
         '<td class="num">' + (c.latent ? fmt(c.latent, 2) : '—') + '</td>' +
         '<td class="num">' + fmt(c.total, 2) + '</td>' +
-        '<td class="col-basis muted-cell">' + esc(c.basis) + '</td>' +
+        '<td class="col-basis muted-cell">' + esc(basisText(c.basis)) + '</td>' +
         '</tr>';
     }).join('');
     var roomS = 0, roomL = 0, ventS = 0, ventL = 0;
@@ -585,13 +775,13 @@
       if (c.scope === 'Room') { roomS += c.sensible; roomL += c.latent; }
       else { ventS += c.sensible; ventL += c.latent; }
     });
-    var foot = '<tr><td>إجمالي الغرفة</td><td class="num">' + fmt(roomS, 2) +
+    var foot = '<tr><td>' + t('d.roomTotal') + '</td><td class="num">' + fmt(roomS, 2) +
       '</td><td class="num">' + fmt(roomL, 2) + '</td><td class="num">' + fmt(roomS + roomL, 2) +
       '</td><td class="col-basis"></td></tr>' +
-      '<tr><td>التهوية الخارجية</td><td class="num">' + fmt(ventS, 2) +
+      '<tr><td>' + t('d.ventTotal') + '</td><td class="num">' + fmt(ventS, 2) +
       '</td><td class="num">' + fmt(ventL, 2) + '</td><td class="num">' + fmt(ventS + ventL, 2) +
       '</td><td class="col-basis"></td></tr>' +
-      '<tr><td>حمل التصميم</td><td class="num">' + fmt(l.designSensible, 2) +
+      '<tr><td>' + t('d.designLoad') + '</td><td class="num">' + fmt(l.designSensible, 2) +
       '</td><td class="num">' + fmt(l.designLatent, 2) + '</td><td class="num">' + fmt(l.designTotal, 2) +
       '</td><td class="col-basis">' + fmt(l.designTr, 2) + ' TR</td></tr>';
     var table = $('l-components');
@@ -634,14 +824,14 @@
     $('l-vent').value = fmt(inp.ventilationLsp, 1);
     recalcLoads();
     go('loads');
-    toast('تم نقل مدخلات التصميم السريع إلى أحمال التبريد');
+    toast(t('d.toast.quickLoads'));
   }
 
   function transferLoadToCycle(kw, message) {
     $('c-load').value = fmt(kw, 2);
     recalcCycle();
     go('cycle');
-    toast(message || 'تم نقل الحمل');
+    toast(message || t('d.toast.cycleLoad'));
   }
 
   function transferLoadToAhu() {
@@ -656,14 +846,14 @@
     $('a-outpreset').value = 'Custom';
     recalcAhu();
     go('ahu');
-    toast('تم نقل الغرفة والحمل إلى وحدة مناولة الهواء');
+    toast(t('d.toast.loadAhu'));
   }
 
   /* ================================================================== */
   /* AHU + psychrometric chart                                         */
   /* ================================================================== */
   function initAhu() {
-    fillSelect('a-outpreset', selectOptions(H.WEATHER_PRESETS, function (v) { return v.ar; }), 'Hot dry example');
+    fillAhuSelects();
     var d = H.calcLoad({});
     $('a-sens').value = fmt(d.roomSensible, 2);
     $('a-lat').value = fmt(d.roomLatent, 2);
@@ -684,7 +874,7 @@
     });
     $('a-to-cycle').addEventListener('click', function () {
       if (!state.ahu) return;
-      transferLoadToCycle(state.ahu.coilTotal, 'تم نقل حمل الملف إلى دورة التبريد');
+      transferLoadToCycle(state.ahu.coilTotal, t('d.toast.ahuCycle'));
     });
 
     recalcAhu();
@@ -705,7 +895,7 @@
         H.P_ATM
       );
     } catch (err) {
-      setStatus('a-status', 'تحقق من المدخلات: ' + err.message, true);
+      setStatus('a-status', t('d.status.error', { msg: errText(err) }), true);
       return;
     }
     state.ahu = ahu;
@@ -722,7 +912,7 @@
 
     renderStates(ahu);
     setHTML('a-chart', renderPsychroChart(ahu));
-    setStatus('a-status', 'حُسب في ' + fmt(performance.now() - t0, 1) + ' ms · ' + nowClock());
+    setStatus('a-status', t('d.status.ms', { ms: fmt(performance.now() - t0, 1), time: nowClock() }));
   }
 
   function stateCard(code, name, st, cls) {
@@ -738,11 +928,11 @@
 
   function renderStates(a) {
     setHTML('a-states',
-      stateCard('RA', 'هواء الغرفة', a.room, '') +
-      stateCard('OA', 'هواء خارجي', a.outdoor, 'is-oa') +
-      stateCard('MA', 'خليط', a.mixed, '') +
-      stateCard('SA', 'إمداد', a.supply, 'is-sa') +
-      stateCard('ADP', 'ندى الملف', a.adp, '')
+      stateCard('RA', t('d.state.RA'), a.room, '') +
+      stateCard('OA', t('d.state.OA'), a.outdoor, 'is-oa') +
+      stateCard('MA', t('d.state.MA'), a.mixed, '') +
+      stateCard('SA', t('d.state.SA'), a.supply, 'is-sa') +
+      stateCard('ADP', t('d.state.ADP'), a.adp, '')
     );
   }
 
@@ -760,7 +950,7 @@
       '<stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.01"/></linearGradient></defs>';
 
     var xTicks = [];
-    for (var t = Math.ceil(tMin / 5) * 5; t <= tMax; t += 5) xTicks.push(t);
+    for (var tick = Math.ceil(tMin / 5) * 5; tick <= tMax; tick += 5) xTicks.push(tick);
     var yTicks = [];
     for (var g = 0; g <= gMax + 1e-9; g += 2) yTicks.push(g);
     inner += chartGrid(sx, sy, xTicks, yTicks, ml, W - mr, mt, H - mb);
@@ -797,7 +987,7 @@
       [22.2, 70], [25.2, 70], [26.8, 30], [23.8, 30]
     ].map(function (p) { return [sx(p[0]), sy(comfortW(p[0], p[1]))]; });
     inner += '<path d="' + pathFrom(comfort) + ' Z" fill="rgba(52,211,153,0.10)" stroke="rgba(52,211,153,0.55)" stroke-width="1" stroke-dasharray="4 3"/>';
-    inner += '<text x="' + sx(24.5) + '" y="' + (sy(comfortW(24.5, 50)) - 6) + '" text-anchor="middle" fill="#34d399" class="axis-label">راحة</text>';
+    inner += '<text x="' + sx(24.5) + '" y="' + (sy(comfortW(24.5, 50)) - 6) + '" text-anchor="middle" fill="#34d399" class="axis-label">' + L('راحة', 'comfort') + '</text>';
 
     // Process lines.
     var ra = [sx(a.room.db), sy(a.room.w * 1000)];
@@ -823,9 +1013,9 @@
     xTicks.forEach(function (t) {
       inner += '<text x="' + sx(t) + '" y="' + (H - mb + 16) + '" text-anchor="middle" class="axis-label">' + t + '</text>';
     });
-    inner += '<text x="' + (W - mr) + '" y="' + (H - 8) + '" text-anchor="end" class="axis-label">حرارة جافة °C</text>';
+    inner += '<text x="' + (W - mr) + '" y="' + (H - 8) + '" text-anchor="end" class="axis-label">' + L('حرارة جافة °C', 'Dry-bulb °C') + '</text>';
     inner += '<text x="' + ml + '" y="' + (mt - 6) + '" text-anchor="start" class="axis-label">W (g/kg)</text>';
-    return svgWrap(W, H, inner, 'مخطط سيكومتري لحالات الهواء ونقطة الندى الظاهري');
+    return svgWrap(W, H, inner, t('a.chart.aria'));
   }
 
   /* ================================================================== */
@@ -836,7 +1026,7 @@
     $('cycle-form').addEventListener('change', scheduleCycle);
     $('c-use-load').addEventListener('click', function () {
       if (!state.load) return;
-      transferLoadToCycle(state.load.designTotal, 'تم نقل حمل التصميم إلى الدورة');
+      transferLoadToCycle(state.load.designTotal, t('d.toast.cycleLoad'));
     });
     if (state.load) $('c-load').value = fmt(state.load.designTotal, 2);
     recalcCycle();
@@ -857,7 +1047,7 @@
         coolingLoadKw: num('c-load', 19.16)
       });
     } catch (err) {
-      setStatus('c-status', 'تحقق من المدخلات: ' + err.message, true);
+      setStatus('c-status', t('d.status.error', { msg: errText(err) }), true);
       return;
     }
     state.cycle = c;
@@ -875,7 +1065,7 @@
 
     var rows = c.states.map(function (st) {
       return '<tr>' +
-        '<td><strong>' + st.n + '</strong> · ' + esc(st.ar) + '</td>' +
+        '<td><strong>' + st.n + '</strong> · ' + esc(L(st.ar, st.label)) + '</td>' +
         '<td class="num">' + fmt(st.T, 1) + '</td>' +
         '<td class="num">' + fmt(st.P, 2) + '</td>' +
         '<td class="num">' + fmt(st.h, 1) + '</td>' +
@@ -886,12 +1076,12 @@
     var tbody = $('c-states').querySelector('tbody');
     tbody.innerHTML = rows;
 
-    setText('c-note', c.subcooled
-      ? 'الحالة 3 سائل مضغوط تحت التشبع. الحالة 4 بعد صمام التمدد بجودة بخار ' + fmt(c.states[3].quality, 3) + '.'
-      : 'الحالة 3 سائل مشبع. الحالة 4 بعد صمام التمدد بجودة بخار ' + fmt(c.states[3].quality, 3) + '.');
+    setText('c-note', t(c.subcooled ? 'd.cycle.subcooled' : 'd.cycle.saturated', {
+      x: fmt(c.states[3].quality, 3)
+    }));
 
     setHTML('c-chart', renderCycleChart(c));
-    setStatus('c-status', 'حُسب في ' + fmt(performance.now() - t0, 1) + ' ms · جدول R134a مدمج · ' + nowClock());
+    setStatus('c-status', t('d.status.cycle', { ms: fmt(performance.now() - t0, 1), time: nowClock() }));
   }
 
   function renderCycleChart(c) {
@@ -912,7 +1102,7 @@
     var xTicks = [];
     for (var s = Math.ceil(sMin * 10) / 10; s <= sMax; s += 0.1) xTicks.push(Math.round(s * 10) / 10);
     var yTicks = [];
-    for (var t = Math.ceil(tMin / 10) * 10; t <= tMax; t += 10) yTicks.push(t);
+    for (var temp = Math.ceil(tMin / 10) * 10; temp <= tMax; temp += 10) yTicks.push(temp);
     var inner = chartGrid(sx, sy, xTicks, yTicks, ml, W - mr, mt, H - mb);
 
     var left = [], right = [];
@@ -947,9 +1137,9 @@
     xTicks.forEach(function (s) {
       inner += '<text x="' + sx(s) + '" y="' + (H - mb + 16) + '" text-anchor="middle" class="axis-label">' + fmt(s, 1) + '</text>';
     });
-    inner += '<text x="' + (W - mr) + '" y="' + (H - 8) + '" text-anchor="end" class="axis-label">الإنتروبيا s (kJ/kg·K)</text>';
+    inner += '<text x="' + (W - mr) + '" y="' + (H - 8) + '" text-anchor="end" class="axis-label">' + L('الإنتروبيا s (kJ/kg·K)', 'Entropy s (kJ/kg·K)') + '</text>';
     inner += '<text x="' + ml + '" y="' + (mt - 5) + '" text-anchor="start" class="axis-label">T (°C)</text>';
-    return svgWrap(W, H, inner, 'مخطط درجة الحرارة والإنتروبيا لدورة التبريد');
+    return svgWrap(W, H, inner, t('c.chart.aria'));
   }
 
   /* ================================================================== */
@@ -963,7 +1153,7 @@
   };
 
   function initControl() {
-    fillSelect('k-weather', Object.keys(WEATHERS).map(function (k) { return [k, WEATHERS[k].ar]; }), 'Hot afternoon');
+    fillControlWeather();
     $('k-weather').addEventListener('change', function () {
       var w = WEATHERS[this.value];
       if (!w) return;
@@ -1000,7 +1190,7 @@
       $('k-outamp').value = d.outdoorAmp;
       $('k-outrh').value = d.outdoorRh;
       recalcControl();
-      toast('تمت استعادة إعداد المحاكاة');
+      toast(t('d.toast.resetSim'));
     });
     $('control-form').addEventListener('input', scheduleControl);
     $('control-form').addEventListener('change', scheduleControl);
@@ -1045,7 +1235,7 @@
     try {
       both = H.simulateBoth(readControl());
     } catch (err) {
-      setStatus('k-status', 'تحقق من المدخلات: ' + err.message, true);
+      setStatus('k-status', t('d.status.error', { msg: errText(err) }), true);
       return;
     }
     state.sim = both;
@@ -1063,7 +1253,7 @@
     setText('k-final', fmt(selected.finalDb, 2));
     setText('k-finalrh', fmt(selected.finalRh, 0));
     setText('k-finalet', fmt(selected.finalEt, 1));
-    setText('k-run-tag', fmt0(selected.steps) + ' خطوة');
+    setText('k-run-tag', t('d.steps', { n: fmt0(selected.steps) }));
 
     setTone('k-comfort', selected.comfortLastHalfPct, 98, 85);
     setTone('k-humid', selected.humidityPct, 95, 80);
@@ -1073,8 +1263,11 @@
     attachSimHover(selected);
 
     renderCompare(both);
-    setStatus('k-status', 'حُسبت ' + (both.pid.steps + both.threshold.steps) + ' خطوة زمنية في ' +
-      fmt(performance.now() - t0, 1) + ' ms · ' + nowClock());
+    setStatus('k-status', t('d.status.steps', {
+      n: both.pid.steps + both.threshold.steps,
+      ms: fmt(performance.now() - t0, 1),
+      time: nowClock()
+    }));
   }
 
   function setTone(id, value, good, warn) {
@@ -1092,7 +1285,7 @@
     var rows = [both.pid, both.threshold];
     var minElectric = Math.min(both.pid.electricityKwh, both.threshold.electricityKwh);
     var body = rows.map(function (r) {
-      var name = r.inputs.controller === 'PID' ? 'PID مستمر' : 'تشغيل / إيقاف';
+      var name = r.inputs.controller === 'PID' ? t('d.pid') : t('d.threshold');
       var comfortCls = r.comfortLastHalfPct >= 98 ? 'good' : (r.comfortLastHalfPct >= 85 ? 'warn' : '');
       var elecCls = Math.abs(r.electricityKwh - minElectric) < 1e-9 ? 'good' : '';
       return '<tr>' +
@@ -1121,7 +1314,7 @@
 
     var xTicks = [];
     var step = tMax <= 8 ? 1 : 2;
-    for (var t = 0; t <= tMax + 1e-9; t += step) xTicks.push(t);
+    for (var tick = 0; tick <= tMax + 1e-9; tick += step) xTicks.push(tick);
     var yTicks = [];
     for (var y = Math.ceil(lo / 5) * 5; y <= hi; y += 5) yTicks.push(y);
     var inner = chartGrid(sx, sy, xTicks, yTicks, ml, W - mr, mt, H - mb);
@@ -1146,7 +1339,7 @@
       inner += '<text x="' + sx(t) + '" y="' + (H - 8) + '" text-anchor="middle">' + ('0' + hour).slice(-2) + ':00</text>';
     });
     inner += '<text x="' + ml + '" y="' + (mt - 4) + '" text-anchor="start" class="axis-label">°C</text>';
-    return svgWrap(W, H, inner, 'حرارة الغرفة والهواء الخارجي ونطاق الراحة');
+    return svgWrap(W, H, inner, t('k.chart.aria'));
   }
 
   function attachSimHover(sim) {
@@ -1195,8 +1388,12 @@
       guide.setAttribute('x2', gx);
       guide.style.display = '';
       var hour = Math.round(sim.inputs.startHour + sim.timeH[best]) % 24;
-      tip.innerHTML = '<b>' + ('0' + hour).slice(-2) + ':00</b> · غرفة ' + fmt(sim.roomT[best], 2) +
-        '° · خارج ' + fmt(sim.outdoorT[best], 1) + '° · RH ' + fmt(sim.roomRh[best], 0) + '%';
+      tip.innerHTML = esc(t('d.tooltip', {
+        time: ('0' + hour).slice(-2) + ':00',
+        room: fmt(sim.roomT[best], 2),
+        out: fmt(sim.outdoorT[best], 1),
+        rh: fmt(sim.roomRh[best], 0)
+      }));
       tip.style.display = '';
       var leftPct = gx / W * 100;
       tip.style.left = Math.min(88, Math.max(6, leftPct)) + '%';
@@ -1214,7 +1411,7 @@
     var sy = function (kw) { return mt + (1 - kw / cap) * (H - mt - mb); };
     var xTicks = [];
     var step = tMax <= 8 ? 1 : 2;
-    for (var t = 0; t <= tMax + 1e-9; t += step) xTicks.push(t);
+    for (var tick = 0; tick <= tMax + 1e-9; tick += step) xTicks.push(tick);
     var yTicks = [0, cap * 0.25, cap * 0.5, cap * 0.75, cap];
     var inner = chartGrid(sx, sy, xTicks, yTicks, ml, W - mr, mt, H - mb);
 
@@ -1233,7 +1430,204 @@
       inner += '<text x="' + sx(t) + '" y="' + (H - 8) + '" text-anchor="middle">' + ('0' + hour).slice(-2) + ':00</text>';
     });
     inner += '<text x="' + ml + '" y="' + (mt - 2) + '" text-anchor="start" class="axis-label">kW</text>';
-    return svgWrap(W, H, inner, 'التبريد المحسوس والكامن على مدار اليوم');
+    return svgWrap(W, H, inner, t('k.demand.aria'));
+  }
+
+  /* ================================================================== */
+  /* Plain-language help popover                                       */
+  /* ================================================================== */
+  var helpPop = null, helpTitleEl = null, helpBodyEl = null, helpBackdrop = null;
+  var helpBtn = null, helpPinned = false, helpShowTimer = 0, helpHideTimer = 0;
+
+  function cleanText(node) {
+    if (!node) return '';
+    var clone = node.cloneNode(true);
+    $$('.help-btn', clone).forEach(function (b) { b.remove(); });
+    var pick = clone.querySelector('.lbl') ||
+      clone.querySelector('h1, h2, h3, h4') ||
+      clone.querySelector('.metric > span') ||
+      clone.querySelector('span');
+    return ((pick || clone).textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function makeHelpButton(key, host) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'help-btn';
+    btn.setAttribute('data-help-key', key);
+    btn.setAttribute('aria-label', t('a11y.help'));
+    btn.setAttribute('aria-expanded', 'false');
+    btn.textContent = '?';
+    btn.__host = host;
+    btn.addEventListener('mouseenter', function () {
+      if (!window.matchMedia('(hover: hover)').matches) return;
+      if (helpPinned) return;
+      clearTimeout(helpHideTimer);
+      clearTimeout(helpShowTimer);
+      helpShowTimer = setTimeout(function () { showHelp(btn); }, 110);
+    });
+    btn.addEventListener('mouseleave', function () {
+      if (!window.matchMedia('(hover: hover)').matches) return;
+      clearTimeout(helpShowTimer);
+      if (helpPinned) return;
+      helpHideTimer = setTimeout(closeHelp, 180);
+    });
+    btn.addEventListener('focus', function () { showHelp(btn); });
+    btn.addEventListener('blur', function () {
+      if (!helpPinned) helpHideTimer = setTimeout(closeHelp, 150);
+    });
+    btn.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (helpBtn === btn && helpPinned) { closeHelp(); return; }
+      helpPinned = true;
+      showHelp(btn);
+    });
+    btn.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') { ev.stopPropagation(); closeHelp(); }
+    });
+    return btn;
+  }
+
+  function placeHelpButton(host, key) {
+    if (!host || host.querySelector(':scope > .help-btn')) return;
+    var btn = makeHelpButton(key, host);
+    if (/^H[1-6]$/.test(host.tagName)) {
+      host.appendChild(btn);
+      return;
+    }
+    if (host.classList.contains('section-head')) {
+      var sh = host.querySelector('h1, h2, h3');
+      (sh || host).appendChild(btn);
+      return;
+    }
+    if (host.hasAttribute('data-help') && host.getAttribute('data-help').indexOf('s:') === 0) {
+      var sspan = host.querySelector('span');
+      (sspan || host).appendChild(btn);
+      return;
+    }
+    var slot = host.querySelector('.panel-head') || host.querySelector('.result-top') ||
+      host.querySelector('.status-head');
+    if (slot) { slot.appendChild(btn); return; }
+    host.classList.add('has-help-float');
+    host.appendChild(btn);
+  }
+
+  function attachHelpToField(el, key) {
+    var field = el.closest('.check-field') || el.closest('.field');
+    if (!field || field.querySelector('.help-btn')) return;
+    var span = el.closest('.check-field')
+      ? field.querySelector('span:last-of-type')
+      : field.querySelector('span');
+    if (!span) return;
+    span.appendChild(makeHelpButton(key, field));
+  }
+
+  function initHelp() {
+    helpPop = $('help-pop');
+    helpTitleEl = $('help-pop-title');
+    helpBodyEl = $('help-pop-body');
+    helpBackdrop = $('help-backdrop');
+    if (!helpPop) return;
+
+    $$('[data-help]').forEach(function (host) {
+      var key = host.getAttribute('data-help');
+      if (hasHelp(key)) placeHelpButton(host, key);
+    });
+
+    $$('.metric').forEach(function (m) {
+      var strong = m.querySelector('strong[id]');
+      if (!strong) return;
+      var key = 'm:' + strong.id;
+      if (!hasHelp(key)) return;
+      var span = m.querySelector('span');
+      if (span) span.appendChild(makeHelpButton(key, m));
+    });
+
+    $$('input[id], select[id], [role="radiogroup"][id]').forEach(function (el) {
+      if (hasHelp(el.id)) attachHelpToField(el, el.id);
+    });
+
+    var close = $('help-pop-close');
+    if (close) close.addEventListener('click', closeHelp);
+    if (helpBackdrop) helpBackdrop.addEventListener('click', closeHelp);
+
+    helpPop.addEventListener('mouseenter', function () {
+      clearTimeout(helpHideTimer);
+      clearTimeout(helpShowTimer);
+    });
+    helpPop.addEventListener('mouseleave', function () {
+      if (!helpPinned) helpHideTimer = setTimeout(closeHelp, 200);
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && helpBtn) closeHelp();
+    });
+    document.addEventListener('pointerdown', function (ev) {
+      if (!helpBtn) return;
+      if (helpPop.contains(ev.target)) return;
+      if (helpBtn.contains(ev.target)) return;
+      closeHelp();
+    }, true);
+    window.addEventListener('resize', function () {
+      if (helpBtn) positionHelp();
+    });
+    window.addEventListener('scroll', function () {
+      if (helpBtn && !helpPinned) closeHelp();
+    }, { passive: true });
+    document.addEventListener('hashchange', closeHelp);
+  }
+
+  function showHelp(btn) {
+    if (!btn || !helpPop) return;
+    var key = btn.getAttribute('data-help-key');
+    var text = helpText(key);
+    if (!text) return;
+    if (helpBtn && helpBtn !== btn) helpBtn.setAttribute('aria-expanded', 'false');
+    helpBtn = btn;
+    var host = btn.__host || btn.parentElement;
+    var title = cleanText(host);
+    helpTitleEl.textContent = title || t('d.helpTitle');
+    helpBodyEl.textContent = text;
+    helpPop.hidden = false;
+    helpBackdrop.hidden = true;
+    btn.setAttribute('aria-expanded', 'true');
+    positionHelp();
+  }
+
+  function positionHelp() {
+    if (!helpBtn || !helpPop) return;
+    var sheet = window.matchMedia('(max-width: 640px)').matches;
+    helpPop.classList.toggle('is-sheet', sheet);
+    if (sheet) {
+      if (helpBackdrop) helpBackdrop.hidden = false;
+      helpPop.style.left = '';
+      helpPop.style.top = '';
+      helpPop.style.width = '';
+      return;
+    }
+    if (helpBackdrop) helpBackdrop.hidden = true;
+    var r = helpBtn.getBoundingClientRect();
+    var vw = window.innerWidth, vh = window.innerHeight;
+    var w = Math.min(310, vw - 24);
+    helpPop.style.width = w + 'px';
+    var left = r.left + r.width / 2 - w / 2;
+    left = Math.max(12, Math.min(vw - w - 12, left));
+    var h = helpPop.offsetHeight || 130;
+    var top = r.bottom + 10;
+    if (top + h > vh - 12) top = Math.max(12, r.top - h - 10);
+    helpPop.style.left = Math.round(left) + 'px';
+    helpPop.style.top = Math.round(top) + 'px';
+  }
+
+  function closeHelp() {
+    clearTimeout(helpShowTimer);
+    clearTimeout(helpHideTimer);
+    helpPinned = false;
+    if (helpBtn) helpBtn.setAttribute('aria-expanded', 'false');
+    helpBtn = null;
+    if (helpPop) helpPop.hidden = true;
+    if (helpBackdrop) helpBackdrop.hidden = true;
   }
 
   /* ================================================================== */
@@ -1242,16 +1636,13 @@
   function initServiceWorker() {
     if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').then(function () {
-        setText('offline-chip-text', 'جاهز دون إنترنت');
-      }).catch(function () {
-        setText('offline-chip-text', 'محلي · فوري');
-      });
+      navigator.serviceWorker.register('sw.js').catch(function () {});
     });
   }
 
   function boot() {
     initTheme();
+    initLang();
     initServiceWorker();
     window.addEventListener('hashchange', route);
     initQuick();
@@ -1259,12 +1650,11 @@
     initAhu();
     initCycle();
     initControl();
+    initHelp();
     route();
 
-    var t = performance.now();
-    window.__HVAC_BOOT_MS = t;
-    var chip = $('offline-chip');
-    if (chip) chip.title = 'تم تحميل المحرك في ' + fmt(t, 0) + ' ms · كل الحسابات على جهازك';
+    var t0 = performance.now();
+    window.__HVAC_BOOT_MS = t0;
   }
 
   if (document.readyState === 'loading') {

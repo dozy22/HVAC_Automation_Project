@@ -1,7 +1,7 @@
 /* Offline cache for the static HVAC Design Studio.
    Assets are cache-first; pages are served from cache instantly and quietly
    refreshed in the background so a new deploy arrives on the next visit. */
-const CACHE = 'hvac-studio-v3';
+const CACHE = 'hvac-studio-v5';
 const CORE = [
   './',
   './index.html',
@@ -10,6 +10,7 @@ const CORE = [
   './web/app.css',
   './web/app.js',
   './web/engine.js',
+  './web/i18n.js',
   './web/r134a.js'
 ];
 
