@@ -1,0 +1,20 @@
+{
+  "name": "HVAC Design Studio",
+  "short_name": "HVAC Studio",
+  "description": "محرك تصميم تكييف كامل يعمل داخل المتصفح: أحمال التبريد، السيكومترية، AHU، دورة R134a، والراحة والتحكم.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html#overview",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07101e",
+  "theme_color": "#07101e",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

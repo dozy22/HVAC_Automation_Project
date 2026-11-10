@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>استوديو تصميم HVAC — نسخة محلية سريعة</title>
+  <meta name="description" content="محرك تصميم تكييف كامل يعمل داخل المتصفح: أحمال التبريد، السيكومترية، وحدة مناولة الهواء، دورة تبريد R134a، والراحة والتحكم. بدون سيرفر وبدون انتظار.">
+  <meta name="theme-color" content="#07101e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="web/app.css">
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('hvac-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') {
+        document.documentElement.dataset.theme = savedTheme;
+      }
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">تخطَّ إلى المحتوى</a>
+
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="استوديو تصميم HVAC — الصفحة الرئيسية">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" role="img">
+          <rect x="1" y="1" width="38" height="38" rx="11" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M9 14.5h13.5a4.2 4.2 0 0 1 0 8.4H12" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+          <path d="M9 28.5h17.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+          <circle cx="29.5" cy="11" r="2.4" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong>HVAC Design Studio</strong>
+        <small>استوديو التصميم الحراري</small>
+      </span>
+    </a>
+
+    <nav class="tabs" aria-label="أقسام الموقع">
+      <a href="#overview" data-nav="overview">نظرة عامة</a>
+      <a href="#quick" data-nav="quick">التصميم السريع</a>
+      <a href="#loads" data-nav="loads">أحمال التبريد</a>
+      <a href="#ahu" data-nav="ahu">السيكومترية و AHU</a>
+      <a href="#cycle" data-nav="cycle">دورة التبريد</a>
+      <a href="#control" data-nav="control">الراحة والتحكم</a>
+    </nav>
+
+    <div class="top-actions">
+      <span class="live-chip" id="offline-chip" title="كل الحسابات تجري على جهازك">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span id="offline-chip-text">محلي · فوري</span>
+      </span>
+      <button class="icon-btn" id="theme-btn" type="button" aria-label="تبديل المظهر الفاتح والداكن" title="تبديل المظهر">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ================= OVERVIEW ================= -->
+    <section class="page active" id="page-overview" aria-labelledby="overview-title">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> نسخة محلية · بدون سيرفر · بدون انتظار</p>
+          <h1 id="overview-title">من فكرة الغرفة إلى اختيار المعدات، <span>في ثوانٍ.</span></h1>
+          <p class="hero-lead">
+            أدخل ست إجابات فقط، ليحسب المحرك الحمل الحراري ويرشّح النظام المناسب،
+            ثم افتح التفاصيل الكاملة: أحمال التبريد، السيكومترية، دورة R134a، والراحة والتحكم.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#quick">
+              ابدأ التصميم السريع
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-ghost" href="#loads">جرّب أحمال التبريد</a>
+          </div>
+          <p class="hero-note">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-2.9 7.6-7 9.5-4.1-1.9-7-5.2-7-9.5V6l7-3Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            كل الحسابات تجري داخل متصفحك. لا يُرسل أي رقم إلى أي سيرفر.
+          </p>
+        </div>
+
+        <aside class="status-board" aria-label="لوحة الحالة المباشرة">
+          <div class="status-head">
+            <div>
+              <span class="panel-kicker">لوحة الحالة</span>
+              <h2>مثال حي</h2>
+            </div>
+            <span class="pulse" aria-hidden="true"></span>
+          </div>
+          <div class="status-main">
+            <span class="status-label">حمل التصميم</span>
+            <div class="status-big"><span id="ov-load">19.16</span><small>kW</small></div>
+            <span class="status-sub"><span id="ov-tr">5.45</span> طن تبريد</span>
+          </div>
+          <div class="status-grid">
+            <div><span>النظام</span><strong id="ov-system">VRF متعدد</strong></div>
+            <div><span>القدرة</span><strong><span id="ov-cap">25</span> kW</strong></div>
+            <div><span>COP</span><strong id="ov-cop">3.98</strong></div>
+            <div><span>المساحة</span><strong><span id="ov-area">96</span> m²</strong></div>
+          </div>
+          <div class="status-foot">
+            <span class="tag">بغداد</span>
+            <span class="tag">واجهة غربية</span>
+            <span class="tag">زجاج 25%</span>
+          </div>
+          <a class="status-link" href="#quick">عدّل هذا المثال <span aria-hidden="true">←</span></a>
+        </aside>
+      </div>
+
+      <div class="speed-strip">
+        <div class="speed-item">
+          <span class="speed-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5L13 2Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+          </span>
+          <div><strong>يفتح فوراً</strong><span>لا إقلاع سيرفر ولا انتظار 60 ثانية.</span></div>
+        </div>
+        <div class="speed-item">
+          <span class="speed-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="7" r="2" fill="currentColor"/><circle cx="15" cy="12" r="2" fill="currentColor"/><circle cx="10" cy="17" r="2" fill="currentColor"/></svg>
+          </span>
+          <div><strong>نفس الفيزياء</strong><span>نفس معادلات ASHRAE والنتائج الافتراضية.</span></div>
+        </div>
+        <div class="speed-item">
+          <span class="speed-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+          </span>
+          <div><strong>يعمل دون إنترنت</strong><span>بعد أول فتح، يبقى التطبيق على جهازك.</span></div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <p class="eyebrow"><span class="eyebrow-line"></span> خمس شاشات حسابية</p>
+        <h2>محرك واحد، وكل ما تحتاجه للعرض.</h2>
+        <p>كل شاشة تكمل الأخرى: الحمل يغذي AHU ودورة التبريد، والتحكم يختبر النتيجة على مدار اليوم.</p>
+      </div>
+
+      <div class="module-grid">
+        <a class="module-card" href="#quick">
+          <span class="module-num">01</span>
+          <h3>التصميم السريع</h3>
+          <p>ست إجابات تعطي حملاً ونظاماً وحجماً مبدئياً، بهامش أمان واضح.</p>
+          <span class="module-link">افتح الشاشة <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="module-card" href="#loads">
+          <span class="module-num">02</span>
+          <h3>أحمال التبريد</h3>
+          <p>تفصيل كل مكوّن: جدران، سقف، زجاج، أشخاص، تسرب، وهواء نقي.</p>
+          <span class="module-link">افتح الشاشة <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="module-card" href="#ahu">
+          <span class="module-num">03</span>
+          <h3>السيكومترية و AHU</h3>
+          <p>حالات الهواء، نقطة الندى الظاهري، معامل التجاوز، وحمل الملف.</p>
+          <span class="module-link">افتح الشاشة <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="module-card" href="#cycle">
+          <span class="module-num">04</span>
+          <h3>دورة التبريد</h3>
+          <p>دورة انضغاط بخاري كاملة لـ R134a مع COP والمخطط الحراري.</p>
+          <span class="module-link">افتح الشاشة <span aria-hidden="true">←</span></span>
+        </a>
+        <a class="module-card" href="#control">
+          <span class="module-num">05</span>
+          <h3>الراحة والتحكم</h3>
+          <p>PID مقابل تشغيل/إيقاف، مع منحنى زمني ونسب راحة قابلة للقياس.</p>
+          <span class="module-link">افتح الشاشة <span aria-hidden="true">←</span></span>
+        </a>
+      </div>
+
+      <div class="two-col">
+        <div class="panel info-panel">
+          <span class="panel-kicker">لماذا هذه النسخة؟</span>
+          <h2>لا انتظار، ولا أخطاء سيرفر.</h2>
+          <p>
+            النسخة السحابية كانت تستيقظ من النوم خلال 30–60 ثانية، وأحياناً تعيد خطأ 500.
+            هذه النسخة تحمّل المحرك والواجهة مرة واحدة، ثم تحسب محلياً في أجزاء من الثانية.
+          </p>
+          <div class="compare-mini">
+            <div><span>سحابي</span><strong>30–60 ثانية</strong><small>إقلاع بارد</small></div>
+            <div class="is-good"><span>محلي</span><strong>&lt; 1 ثانية</strong><small>بعد التحميل</small></div>
+          </div>
+        </div>
+        <div class="panel info-panel">
+          <span class="panel-kicker">الأساس الهندسي</span>
+          <h2>معادلات واضحة، لا صندوق أسود.</h2>
+          <div class="chip-row">
+            <span class="chip">ASHRAE Fundamentals</span>
+            <span class="chip">Hyland–Wexler</span>
+            <span class="chip">Sol-air temperature</span>
+            <span class="chip">ADP / BPF</span>
+            <span class="chip">R134a table</span>
+            <span class="chip">PID + anti-windup</span>
+          </div>
+          <p class="small-muted">
+            النتائج تقديرية لأغراض تعليمية. اختيار المعدات النهائي يحتاج مراجعة مهندس مؤهل.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= QUICK ================= -->
+    <section class="page" id="page-quick" aria-labelledby="quick-title">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> الوحدة 01</p>
+          <h1 id="quick-title">التصميم السريع</h1>
+          <p class="lead">ست إجابات فقط. المحرك يكمل الباقي بافتراضات هندسية ظاهرة، ويمكنك تعديلها.</p>
+        </div>
+        <div class="head-stat">
+          <span>زمن الحساب</span>
+          <strong id="q-time">—</strong>
+        </div>
+      </div>
+
+      <div class="workbench">
+        <form class="panel form-panel" id="quick-form" autocomplete="off">
+          <div class="panel-head">
+            <h2>مدخلات المشروع</h2>
+            <span class="mini-tag" id="q-occ-hint">إشغال تلقائي</span>
+          </div>
+
+          <div class="field-grid">
+            <label class="field span-2">
+              <span>نوع المساحة</span>
+              <select id="q-space"></select>
+            </label>
+
+            <label class="field span-2">
+              <span>المدينة</span>
+              <select id="q-city"></select>
+            </label>
+
+            <label class="field span-2">
+              <span>المساحة الأرضية <b>m²</b></span>
+              <div class="paired">
+                <input type="number" id="q-area" min="10" max="4000" step="1" value="96">
+                <input type="range" id="q-area-range" min="10" max="1000" step="5" value="96" aria-label="المساحة الأرضية">
+              </div>
+            </label>
+
+            <label class="field span-2">
+              <span>نسبة الزجاج من الجدار <b>%</b></span>
+              <div class="paired">
+                <input type="number" id="q-glazing" min="0" max="70" step="1" value="25">
+                <input type="range" id="q-glazing-range" min="0" max="70" step="1" value="25" aria-label="نسبة الزجاج">
+              </div>
+            </label>
+
+            <div class="field span-2">
+              <span>اتجاه الواجهة الرئيسية</span>
+              <div class="segment" id="q-orient" role="radiogroup" aria-label="اتجاه الواجهة">
+                <label><input type="radio" name="q-orient" value="North"><span>شمال</span></label>
+                <label><input type="radio" name="q-orient" value="East"><span>شرق</span></label>
+                <label><input type="radio" name="q-orient" value="South"><span>جنوب</span></label>
+                <label><input type="radio" name="q-orient" value="West" checked><span>غرب</span></label>
+              </div>
+            </div>
+
+            <label class="field span-2">
+              <span>جودة الغلاف</span>
+              <select id="q-envelope"></select>
+            </label>
+          </div>
+
+          <details class="advanced">
+            <summary>ضبط متقدم <span>اختياري</span></summary>
+            <div class="field-grid">
+              <label class="check-field span-2">
+                <input type="checkbox" id="q-manual">
+                <span>تحديد عدد الأشخاص يدوياً</span>
+              </label>
+
+              <label class="field">
+                <span>عدد الأشخاص</span>
+                <input type="number" id="q-occ" min="0" max="600" step="1" value="11" disabled>
+              </label>
+
+              <label class="field">
+                <span>حرارة الغرفة <b>°C</b></span>
+                <input type="number" id="q-indb" min="20" max="30" step="0.5" value="24">
+              </label>
+
+              <label class="field">
+                <span>رطوبة الغرفة <b>%</b></span>
+                <input type="number" id="q-inrh" min="20" max="80" step="5" value="50">
+              </label>
+
+              <label class="field">
+                <span>هامش الاختيار <b>%</b></span>
+                <div class="paired">
+                  <input type="number" id="q-margin" min="0" max="40" step="1" value="12">
+                  <input type="range" id="q-margin-range" min="0" max="40" step="1" value="12" aria-label="هامش الاختيار">
+                </div>
+              </label>
+
+              <label class="field span-2">
+                <span>تفضيل النظام</span>
+                <select id="q-system">
+                  <option value="Auto" selected>تلقائي (موصى به)</option>
+                  <option value="split">مكيفات سبليت</option>
+                  <option value="ducted">باكج بمجاري</option>
+                  <option value="vrf">VRF متعدد</option>
+                  <option value="chiller">تشيلر + AHU</option>
+                </select>
+              </label>
+
+              <div class="field span-2 custom-weather" id="q-custom-wrap">
+                <span>ظروف التصميم المخصصة</span>
+                <div class="two-inputs">
+                  <label>حرارة جافة <b>°C</b><input type="number" id="q-custom-db" min="30" max="55" step="0.5" value="43"></label>
+                  <label>حرارة رطبة <b>°C</b><input type="number" id="q-custom-wb" min="10" max="35" step="0.5" value="23"></label>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <p class="form-note" id="q-status" role="status">جاهز للحساب.</p>
+        </form>
+
+        <div class="results-column">
+          <div class="panel result-hero" aria-live="polite">
+            <div class="result-top">
+              <span class="panel-kicker">النظام الموصى به</span>
+              <span class="result-badge" id="q-family">VRF</span>
+            </div>
+            <h2 id="q-system-name">VRF متعدد</h2>
+            <p id="q-note">وحدات داخلية منفصلة وكفاءة جزئية عالية طوال اليوم.</p>
+            <div class="capacity-line">
+              <div class="capacity-num"><span id="q-cap">25.0</span><small>kW</small></div>
+              <div class="capacity-side">
+                <strong><span id="q-cap-tr">7.11</span> TR</strong>
+                <span>القدرة المركبة</span>
+              </div>
+            </div>
+            <div class="capacity-bars">
+              <div class="cap-bar"><span>الحمل</span><div><i id="q-bar-load"></i></div><b id="q-load">18.8 kW</b></div>
+              <div class="cap-bar is-target"><span>الهدف</span><div><i id="q-bar-target"></i></div><b id="q-target">21.1 kW</b></div>
+              <div class="cap-bar is-cap"><span>المختار</span><div><i id="q-bar-cap"></i></div><b id="q-cap-label">25.0 kW</b></div>
+            </div>
+            <div class="result-foot">
+              <span>هامش فعلي <b id="q-margin-out">18.5%</b></span>
+              <span>COP مقنن <b id="q-cop">3.65</b></span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>بطاقة الحجم</h2><span class="mini-tag">تقديري</span></div>
+            <div class="metric-grid">
+              <div class="metric"><span>الوحدات الخارجية</span><strong id="q-out-units">2</strong><small>وحدة</small></div>
+              <div class="metric"><span>سعة الوحدة</span><strong id="q-unit-size">12.5</strong><small>kW</small></div>
+              <div class="metric"><span>الوحدات الداخلية</span><strong id="q-in-units">4</strong><small>وحدة</small></div>
+              <div class="metric"><span>تدفق الهواء</span><strong id="q-air">6,150</strong><small>m³/h</small></div>
+              <div class="metric"><span>الهواء النقي</span><strong id="q-fresh">396</strong><small>m³/h</small></div>
+              <div class="metric"><span>الأشخاص</span><strong id="q-occ-count">11</strong><small>شخص</small></div>
+            </div>
+            <div class="design-day">
+              <div class="design-day-head">
+                <span>يوم التصميم في <b id="q-city-label">بغداد</b></span>
+                <span>ذروة <b id="q-outdb">46</b> °C</span>
+              </div>
+              <div class="chart chart-sm" id="q-day-chart" role="img" aria-label="منحنى حرارة يوم التصميم"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>لماذا هذا الاختيار؟</h2></div>
+            <ul class="reason-list" id="q-reasons"></ul>
+          </div>
+
+          <div class="panel caution-panel">
+            <div class="panel-head"><h2>قبل الاعتماد</h2></div>
+            <ul class="caution-list" id="q-cautions"></ul>
+          </div>
+
+          <div class="transfer-row">
+            <button class="btn btn-primary" type="button" id="q-to-loads">افتح أحمال التبريد بهذه المدخلات</button>
+            <button class="btn btn-ghost" type="button" id="q-to-cycle">انقل الحمل إلى دورة التبريد</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LOADS ================= -->
+    <section class="page" id="page-loads" aria-labelledby="loads-title">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> الوحدة 02</p>
+          <h1 id="loads-title">أحمال التبريد</h1>
+          <p class="lead">تقدير الذروة بطريقة درجة حرارة الهواء الشمسية (Sol-air)، مع فصل الحمل المحسوس عن الكامن.</p>
+        </div>
+        <div class="head-stat">
+          <span>إجمالي التصميم</span>
+          <strong><span id="l-head-total">19.16</span> kW</strong>
+        </div>
+      </div>
+
+      <div class="summary-strip">
+        <div><span>الحمل الكلي</span><strong><span id="l-total">19.16</span> <small>kW</small></strong></div>
+        <div><span>بالطن</span><strong><span id="l-tr">5.45</span> <small>TR</small></strong></div>
+        <div><span>RSHF</span><strong><span id="l-rshf">91.5</span> <small>%</small></strong></div>
+        <div><span>الغرفة</span><strong><span id="l-room">14.02</span> <small>kW</small></strong></div>
+        <div><span>الهواء الخارجي</span><strong><span id="l-vent">5.13</span> <small>kW</small></strong></div>
+      </div>
+
+      <div class="workbench">
+        <form class="panel form-panel" id="loads-form" autocomplete="off">
+          <div class="panel-head">
+            <h2>بيانات المشروع</h2>
+            <button class="link-btn" type="button" id="l-reset">استعادة الافتراضي</button>
+          </div>
+
+          <h3 class="form-section">الهندسة</h3>
+          <div class="field-grid">
+            <label class="field"><span>الطول <b>m</b></span><input type="number" id="l-length" min="2" max="200" step="0.5" value="12"></label>
+            <label class="field"><span>العرض <b>m</b></span><input type="number" id="l-width" min="2" max="200" step="0.5" value="8"></label>
+            <label class="field"><span>الارتفاع <b>m</b></span><input type="number" id="l-height" min="2" max="15" step="0.1" value="3.2"></label>
+            <label class="field"><span>نسبة الجدار المعرّض</span><input type="number" id="l-exposed" min="0.3" max="1" step="0.05" value="0.8"></label>
+          </div>
+
+          <h3 class="form-section">الغلاف والزجاج</h3>
+          <div class="field-grid">
+            <label class="field span-2"><span>قالب الجدار</span><select id="l-wall"></select></label>
+            <label class="field"><span>U الجدار <b>W/m²K</b></span><input type="number" id="l-wall-u" min="0.1" max="4" step="0.05" value="0.55"></label>
+            <label class="field"><span>امتصاصية الجدار</span><input type="number" id="l-wall-abs" min="0" max="1" step="0.05" value="0.65"></label>
+            <label class="field span-2"><span>قالب السقف</span><select id="l-roof"></select></label>
+            <label class="field"><span>U السقف <b>W/m²K</b></span><input type="number" id="l-roof-u" min="0.05" max="3" step="0.05" value="0.35"></label>
+            <label class="field"><span>امتصاصية السقف</span><input type="number" id="l-roof-abs" min="0" max="1" step="0.05" value="0.75"></label>
+            <label class="field span-2"><span>قالب الزجاج</span><select id="l-glazing"></select></label>
+            <label class="field"><span>U الزجاج <b>W/m²K</b></span><input type="number" id="l-window-u" min="0.5" max="8" step="0.1" value="1.6"></label>
+            <label class="field"><span>SHGC</span><input type="number" id="l-shgc" min="0.05" max="1" step="0.01" value="0.4"></label>
+            <label class="field"><span>مساحة الزجاج <b>m²</b></span><input type="number" id="l-window" min="0" max="400" step="1" value="18"></label>
+            <label class="field"><span>معامل التظليل</span><input type="number" id="l-shading" min="0" max="1" step="0.05" value="0.85"></label>
+          </div>
+
+          <h3 class="form-section">الطقس والتصميم</h3>
+          <div class="field-grid">
+            <label class="field span-2"><span>حالة الطقس</span><select id="l-weather"></select></label>
+            <label class="field"><span>حرارة خارجية جافة <b>°C</b></span><input type="number" id="l-outdb" min="20" max="55" step="0.5" value="45"></label>
+            <label class="field"><span>حرارة خارجية رطبة <b>°C</b></span><input type="number" id="l-outwb" min="5" max="35" step="0.5" value="24"></label>
+            <label class="field"><span>حرارة الغرفة <b>°C</b></span><input type="number" id="l-indb" min="20" max="30" step="0.5" value="24"></label>
+            <label class="field"><span>رطوبة الغرفة <b>%</b></span><input type="number" id="l-inrh" min="20" max="80" step="5" value="50"></label>
+            <label class="field span-2"><span>اتجاه الشمس على الجدار</span><select id="l-solar"></select></label>
+            <label class="field"><span>شمس السقف <b>W/m²</b></span><input type="number" id="l-roofsolar" min="0" max="1200" step="10" value="950"></label>
+          </div>
+
+          <h3 class="form-section">الأحمال الداخلية</h3>
+          <div class="field-grid">
+            <label class="field"><span>عدد الأشخاص</span><input type="number" id="l-occ" min="0" max="600" step="1" value="20"></label>
+            <label class="field span-2"><span>نشاط الأشخاص</span><select id="l-activity"></select></label>
+            <label class="field"><span>الإضاءة <b>W/m²</b></span><input type="number" id="l-light" min="0" max="60" step="1" value="8"></label>
+            <label class="field"><span>الأجهزة <b>W</b></span><input type="number" id="l-equip" min="0" max="200000" step="100" value="1500"></label>
+          </div>
+
+          <h3 class="form-section">التسرب والتهوية</h3>
+          <div class="field-grid">
+            <label class="field"><span>تسرب الهواء <b>ACH</b></span><input type="number" id="l-ach" min="0" max="5" step="0.05" value="0.5"></label>
+            <label class="field"><span>هواء نقي <b>L/s·شخص</b></span><input type="number" id="l-vent" min="0" max="40" step="1" value="10"></label>
+          </div>
+
+          <p class="form-note" id="l-status" role="status">جاهز للحساب.</p>
+        </form>
+
+        <div class="results-column">
+          <div class="panel">
+            <div class="panel-head"><h2>تفصيل المكوّنات</h2><span class="mini-tag" id="l-area-tag">96 m²</span></div>
+            <div class="table-wrap">
+              <table class="data-table" id="l-components">
+                <thead>
+                  <tr><th>البند</th><th>محسوس</th><th>كامن</th><th>الإجمالي</th><th class="col-basis">الأساس</th></tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot></tfoot>
+              </table>
+            </div>
+            <div class="legend-row">
+              <span><i class="sw sw-envelope"></i> غلاف</span>
+              <span><i class="sw sw-solar"></i> شمسي</span>
+              <span><i class="sw sw-internal"></i> داخلي</span>
+              <span><i class="sw sw-infiltration"></i> تسرب</span>
+              <span><i class="sw sw-ventilation"></i> تهوية</span>
+            </div>
+          </div>
+
+          <div class="panel split-panel">
+            <div class="panel-head"><h2>من أين يأتي الحمل؟</h2></div>
+            <div class="split-row">
+              <div class="split-card"><span>حمل الغرفة</span><strong><span id="l-room-2">14.02</span> kW</strong><small>جدران + زجاج + أشخاص + إضاءة + تسرب</small></div>
+              <div class="split-card is-vent"><span>هواء نقي</span><strong><span id="l-vent-2">5.13</span> kW</strong><small>حمل التهوية الخارجية</small></div>
+            </div>
+            <div class="split-bar"><i id="l-split-room"></i><i id="l-split-vent"></i></div>
+            <div class="mini-grid">
+              <div><span>المحسوس</span><b><span id="l-sensible">17.54</span> kW</b></div>
+              <div><span>الكامن</span><b><span id="l-latent">1.62</span> kW</b></div>
+              <div><span>الحجم</span><b><span id="l-volume">307.2</span> m³</b></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>ملاحظات المحرك</h2></div>
+            <ul class="note-list" id="l-notes"></ul>
+          </div>
+
+          <div class="transfer-row">
+            <button class="btn btn-primary" type="button" id="l-to-ahu">انقل الحمل إلى AHU</button>
+            <button class="btn btn-ghost" type="button" id="l-to-cycle">انقل الحمل إلى دورة التبريد</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= AHU ================= -->
+    <section class="page" id="page-ahu" aria-labelledby="ahu-title">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> الوحدة 03</p>
+          <h1 id="ahu-title">السيكومترية ووحدة مناولة الهواء</h1>
+          <p class="lead">من حالات الهواء الأربع إلى نقطة الندى الظاهري وحمل الملف، على مخطط سيكومتري حقيقي.</p>
+        </div>
+        <div class="head-stat">
+          <span>حمل الملف</span>
+          <strong><span id="a-head-coil">21.05</span> kW</strong>
+        </div>
+      </div>
+
+      <div class="workbench">
+        <form class="panel form-panel" id="ahu-form" autocomplete="off">
+          <div class="panel-head">
+            <h2>ظروف العملية</h2>
+            <button class="link-btn" type="button" id="a-use-load">استخدم حمل التصميم</button>
+          </div>
+
+          <h3 class="form-section">هواء الغرفة</h3>
+          <div class="field-grid">
+            <label class="field"><span>حرارة الغرفة <b>°C</b></span><input type="number" id="a-roomdb" min="18" max="32" step="0.5" value="24"></label>
+            <label class="field"><span>رطوبة الغرفة <b>%</b></span><input type="number" id="a-roomrh" min="20" max="80" step="5" value="50"></label>
+          </div>
+
+          <h3 class="form-section">الهواء الخارجي</h3>
+          <div class="field-grid">
+            <label class="field span-2"><span>حالة الطقس</span><select id="a-outpreset"></select></label>
+            <label class="field"><span>حرارة جافة <b>°C</b></span><input type="number" id="a-outdb" min="20" max="55" step="0.5" value="45"></label>
+            <label class="field"><span>حرارة رطبة <b>°C</b></span><input type="number" id="a-outwb" min="5" max="35" step="0.5" value="24"></label>
+            <label class="field"><span>نسبة الهواء الخارجي <b>%</b></span><input type="number" id="a-oa" min="0" max="100" step="5" value="25"></label>
+          </div>
+
+          <h3 class="form-section">حمل الغرفة والملف</h3>
+          <div class="field-grid">
+            <label class="field"><span>حمل محسوس <b>kW</b></span><input type="number" id="a-sens" min="0.5" max="500" step="0.1" value="12.8"></label>
+            <label class="field"><span>حمل كامن <b>kW</b></span><input type="number" id="a-lat" min="0" max="200" step="0.1" value="1.2"></label>
+            <label class="field"><span>حرارة هواء الإمداد <b>°C</b></span><input type="number" id="a-supply" min="6" max="22" step="0.5" value="13.5"></label>
+          </div>
+
+          <p class="form-note" id="a-status" role="status">جاهز للحساب.</p>
+        </form>
+
+        <div class="results-column">
+          <div class="panel">
+            <div class="panel-head"><h2>حالات الهواء</h2><span class="mini-tag">kPa 101.325</span></div>
+            <div class="state-grid" id="a-states"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>المخطط السيكومتري</h2><span class="mini-tag">T–W</span></div>
+            <div class="chart" id="a-chart" role="img" aria-label="مخطط سيكومتري لعملية وحدة مناولة الهواء"></div>
+            <div class="legend-row">
+              <span><i class="sw sw-oa"></i> خارجي OA</span>
+              <span><i class="sw sw-ra"></i> غرفة RA</span>
+              <span><i class="sw sw-ma"></i> خليط MA</span>
+              <span><i class="sw sw-sa"></i> إمداد SA</span>
+              <span><i class="sw sw-adp"></i> ADP</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>أداء الملف</h2></div>
+            <div class="metric-grid">
+              <div class="metric"><span>حمل الملف الكلي</span><strong id="a-coil">21.05</strong><small>kW</small></div>
+              <div class="metric"><span>محسوس</span><strong id="a-coil-s">17.90</strong><small>kW</small></div>
+              <div class="metric"><span>كامن</span><strong id="a-coil-l">3.15</strong><small>kW</small></div>
+              <div class="metric"><span>ADP</span><strong id="a-adp">12.21</strong><small>°C</small></div>
+              <div class="metric"><span>معامل التجاوز BPF</span><strong id="a-bpf">0.924</strong><small>—</small></div>
+              <div class="metric"><span>تدفق الهواء</span><strong id="a-air">3,541</strong><small>m³/h</small></div>
+            </div>
+            <div class="result-foot">
+              <span>SHF الملف <b id="a-shr">0.850</b></span>
+              <span>RSHF الغرفة <b id="a-rshf">0.915</b></span>
+            </div>
+          </div>
+
+          <div class="transfer-row">
+            <button class="btn btn-ghost" type="button" id="a-to-cycle">انقل حمل الملف إلى دورة التبريد</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CYCLE ================= -->
+    <section class="page" id="page-cycle" aria-labelledby="cycle-title">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> الوحدة 04</p>
+          <h1 id="cycle-title">دورة التبريد</h1>
+          <p class="lead">دورة انضغاط بخاري كاملة لـ R134a، من طاولة خصائص مدمجة، مع COP والكفاءة ومخطط T–s.</p>
+        </div>
+        <div class="head-stat">
+          <span>COP</span>
+          <strong id="c-head-cop">3.98</strong>
+        </div>
+      </div>
+
+      <div class="workbench">
+        <form class="panel form-panel" id="cycle-form" autocomplete="off">
+          <div class="panel-head">
+            <h2>ظروف الدورة</h2>
+            <button class="link-btn" type="button" id="c-use-load">استخدم حمل التصميم</button>
+          </div>
+
+          <div class="field-grid">
+            <label class="field span-2"><span>حمل التبريد المطلوب <b>kW</b></span><input type="number" id="c-load" min="0.5" max="500" step="0.1" value="19.16"></label>
+            <label class="field"><span>حرارة التبخير <b>°C</b></span><input type="number" id="c-evap" min="-15" max="20" step="0.5" value="2"></label>
+            <label class="field"><span>حرارة التكثيف <b>°C</b></span><input type="number" id="c-cond" min="25" max="60" step="0.5" value="45"></label>
+            <label class="field"><span>درجة التحميص <b>K</b></span><input type="number" id="c-sh" min="0" max="30" step="0.5" value="5"></label>
+            <label class="field"><span>درجة التبريد الفرعي <b>K</b></span><input type="number" id="c-sc" min="0" max="25" step="0.5" value="5"></label>
+            <label class="field span-2"><span>الكفاءة الإيزونتروبية للضاغط</span><input type="number" id="c-eta" min="0.3" max="1" step="0.01" value="0.75"></label>
+          </div>
+
+          <p class="form-note" id="c-status" role="status">R134a فقط في النسخة المحلية. الجدول مطابق لـ CoolProp ضمن 0.1%.</p>
+        </form>
+
+        <div class="results-column">
+          <div class="panel">
+            <div class="panel-head"><h2>مؤشرات الدورة</h2><span class="mini-tag" id="c-fluid">R134a</span></div>
+            <div class="metric-grid metric-grid-4">
+              <div class="metric is-accent"><span>COP</span><strong id="c-cop">3.98</strong><small>—</small></div>
+              <div class="metric"><span>COP كارنو</span><strong id="c-carnot">6.40</strong><small>—</small></div>
+              <div class="metric"><span>الكفاءة المنطقية الثانية</span><strong id="c-second">62.1</strong><small>%</small></div>
+              <div class="metric"><span>قدرة الضاغط</span><strong id="c-comp">4.82</strong><small>kW</small></div>
+              <div class="metric"><span>طرد المكثف</span><strong id="c-condkw">23.97</strong><small>kW</small></div>
+              <div class="metric"><span>تدفق الكتلة</span><strong id="c-mass">0.1295</strong><small>kg/s</small></div>
+              <div class="metric"><span>نسبة الضغط</span><strong id="c-pr">3.69</strong><small>—</small></div>
+              <div class="metric"><span>حرارة الخروج</span><strong id="c-discharge">62.7</strong><small>°C</small></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>مخطط T–s</h2><span class="mini-tag">R134a</span></div>
+            <div class="chart" id="c-chart" role="img" aria-label="مخطط درجة الحرارة والإنتروبيا لدورة التبريد"></div>
+            <div class="legend-row">
+              <span><i class="sw sw-dome"></i> قبة التشبع</span>
+              <span><i class="sw sw-cycle"></i> الدورة</span>
+              <span><i class="sw sw-point"></i> حالات 1–4</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>حالات الدورة</h2><span class="mini-tag">h · s · P · T</span></div>
+            <div class="table-wrap">
+              <table class="data-table" id="c-states">
+                <thead><tr><th>الحالة</th><th>T °C</th><th>P bar</th><th>h kJ/kg</th><th>s kJ/kg·K</th><th>x</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="small-muted" id="c-note">الحالة 4 داخل المنطقة ثنائية الطور؛ x هو جودة البخار بعد صمام التمدد.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CONTROL ================= -->
+    <section class="page" id="page-control" aria-labelledby="control-title">
+      <div class="page-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> الوحدة 05</p>
+          <h1 id="control-title">الراحة والتحكم</h1>
+          <p class="lead">محاكاة غرفة مغلقة على 8 ساعات: PID مستمر مقابل تشغيل/إيقاف، مع حرارة ورطوبة ومؤشر راحة.</p>
+        </div>
+        <div class="head-stat">
+          <span>راحة النصف الأخير</span>
+          <strong><span id="k-head-comfort">100</span>%</strong>
+        </div>
+      </div>
+
+      <div class="workbench">
+        <form class="panel form-panel" id="control-form" autocomplete="off">
+          <div class="panel-head">
+            <h2>إعداد المحاكاة</h2>
+            <button class="link-btn" type="button" id="k-reset">استعادة الافتراضي</button>
+          </div>
+
+          <h3 class="form-section">المتحكم والنظام</h3>
+          <div class="field-grid">
+            <label class="field"><span>نوع المتحكم</span>
+              <select id="k-controller"><option value="PID">PID مستمر</option><option value="Threshold">تشغيل / إيقاف</option></select>
+            </label>
+            <label class="field"><span>المشغّل</span>
+              <select id="k-actuator"><option value="Valve">صمام ماء مبرد</option><option value="Supply">حرارة هواء الإمداد</option></select>
+            </label>
+            <label class="field"><span>مدة المحاكاة <b>h</b></span><input type="number" id="k-duration" min="1" max="24" step="1" value="8"></label>
+            <label class="field"><span>ساعة البداية</span><input type="number" id="k-start" min="0" max="23" step="1" value="8"></label>
+            <label class="field"><span>نقطة الضبط <b>°C</b></span><input type="number" id="k-set" min="18" max="30" step="0.5" value="24.5"></label>
+            <label class="field"><span>الحرارة الابتدائية <b>°C</b></span><input type="number" id="k-initial" min="18" max="40" step="0.5" value="28.8"></label>
+            <label class="field"><span>الرطوبة الابتدائية <b>%</b></span><input type="number" id="k-initialrh" min="20" max="90" step="5" value="55"></label>
+            <label class="field"><span>قدرة التبريد <b>kW</b></span><input type="number" id="k-capacity" min="1" max="100" step="0.5" value="10"></label>
+            <label class="field"><span>حمل داخلي محسوس <b>kW</b></span><input type="number" id="k-int-s" min="0" max="50" step="0.5" value="4.5"></label>
+            <label class="field"><span>حمل داخلي كامن <b>kW</b></span><input type="number" id="k-int-l" min="0" max="20" step="0.1" value="0.9"></label>
+            <label class="field"><span>أدنى حرارة إمداد <b>°C</b></span><input type="number" id="k-supplymin" min="6" max="20" step="0.5" value="12.5"></label>
+            <label class="field"><span>أقصى حرارة إمداد <b>°C</b></span><input type="number" id="k-supplymax" min="12" max="28" step="0.5" value="22"></label>
+            <label class="field"><span>COP الضاغط</span><input type="number" id="k-cop" min="1.5" max="6" step="0.05" value="3.2"></label>
+            <label class="field"><span>نطاق التشغيل/الإيقاف <b>K</b></span><input type="number" id="k-band" min="0.1" max="3" step="0.1" value="0.6"></label>
+          </div>
+
+          <h3 class="form-section">الطقس</h3>
+          <div class="field-grid">
+            <label class="field span-2"><span>سيناريو اليوم</span><select id="k-weather"></select></label>
+            <label class="field"><span>متوسط الحرارة <b>°C</b></span><input type="number" id="k-outmean" min="20" max="50" step="0.5" value="36"></label>
+            <label class="field"><span>سعة التغير <b>K</b></span><input type="number" id="k-outamp" min="0" max="12" step="0.5" value="4.5"></label>
+            <label class="field"><span>رطوبة الخارج <b>%</b></span><input type="number" id="k-outrh" min="5" max="95" step="5" value="25"></label>
+          </div>
+
+          <h3 class="form-section">نطاق الراحة</h3>
+          <div class="field-grid">
+            <label class="field"><span>ET* الأدنى <b>°C</b></span><input type="number" id="k-etmin" min="20" max="26" step="0.5" value="23"></label>
+            <label class="field"><span>ET* الأعلى <b>°C</b></span><input type="number" id="k-etmax" min="23" max="30" step="0.5" value="26"></label>
+            <label class="field"><span>RH الأدنى <b>%</b></span><input type="number" id="k-rhmin" min="10" max="50" step="5" value="30"></label>
+            <label class="field"><span>RH الأعلى <b>%</b></span><input type="number" id="k-rhmax" min="40" max="90" step="5" value="70"></label>
+          </div>
+
+          <details class="advanced">
+            <summary>معايرة PID <span>متقدم</span></summary>
+            <div class="field-grid">
+              <label class="field"><span>Kp <b>%/K</b></span><input type="number" id="k-kp" min="0" max="200" step="0.5" value="22"></label>
+              <label class="field"><span>Ki <b>%/K·s</b></span><input type="number" id="k-ki" min="0" max="5" step="0.005" value="0.07"></label>
+              <label class="field"><span>Kd <b>%/K/min</b></span><input type="number" id="k-kd" min="0" max="200" step="1" value="25"></label>
+            </div>
+          </details>
+
+          <p class="form-note" id="k-status" role="status">جاهز للحساب.</p>
+        </form>
+
+        <div class="results-column">
+          <div class="panel" aria-live="polite">
+            <div class="panel-head"><h2>نتيجة المحاكاة</h2><span class="mini-tag" id="k-run-tag">480 خطوة</span></div>
+            <div class="metric-grid metric-grid-4">
+              <div class="metric is-accent"><span>راحة النصف الأخير</span><strong id="k-comfort">100</strong><small>%</small></div>
+              <div class="metric"><span>الرطوبة داخل النطاق</span><strong id="k-humid">100</strong><small>%</small></div>
+              <div class="metric"><span>تبريد مُسلَّم</span><strong id="k-delivered">73.2</strong><small>kWh</small></div>
+              <div class="metric"><span>كهرباء مقدّرة</span><strong id="k-electric">22.9</strong><small>kWh</small></div>
+              <div class="metric"><span>تبديلات الضاغط</span><strong id="k-switches">0</strong><small>—</small></div>
+              <div class="metric"><span>الحرارة النهائية</span><strong id="k-final">24.50</strong><small>°C</small></div>
+              <div class="metric"><span>الرطوبة النهائية</span><strong id="k-finalrh">73.2</strong><small>%</small></div>
+              <div class="metric"><span>ET* النهائي</span><strong id="k-finalet">25.4</strong><small>°C</small></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>الحرارة على مدار اليوم</h2><span class="mini-tag">ET* و DB</span></div>
+            <div class="chart" id="k-chart" role="img" aria-label="منحنى حرارة الغرفة والهواء الخارجي ونطاق الراحة"></div>
+            <div class="legend-row">
+              <span><i class="sw sw-room"></i> حرارة الغرفة</span>
+              <span><i class="sw sw-out"></i> الهواء الخارجي</span>
+              <span><i class="sw sw-set"></i> نقطة الضبط</span>
+              <span><i class="sw sw-band"></i> نطاق ET*</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>التبريد والطلب</h2><span class="mini-tag">kW</span></div>
+            <div class="chart" id="k-demand-chart" role="img" aria-label="التبريد المحسوس والكامن على مدار اليوم"></div>
+            <div class="legend-row">
+              <span><i class="sw sw-sensible"></i> محسوس</span>
+              <span><i class="sw sw-latent"></i> كامن</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>PID مقابل تشغيل/إيقاف</h2></div>
+            <div class="table-wrap">
+              <table class="data-table" id="k-compare">
+                <thead>
+                  <tr><th>المتحكم</th><th>راحة النصف الأخير</th><th>الرطوبة %</th><th>تبريد kWh</th><th>كهرباء kWh</th><th>تبديلات</th><th>حرارة نهائية</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <p class="small-muted">ثابت الزمن 60 ثانية. الراحة تُقاس ببديل ET* = T + 0.04 (RH − 50) مع نطاق رطوبة 30–70%.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <strong>HVAC Design Studio</strong>
+      <span>نسخة محلية تعمل بلا اتصال · نتائج تعليمية تقديرية</span>
+    </div>
+    <div class="footer-links">
+      <a href="report/HVAC_Presentation_Runbook_AR.pdf" target="_blank" rel="noopener">دليل العرض (PDF)</a>
+      <a href="https://github.com/dozy22/HVAC_Automation_Project" target="_blank" rel="noopener">الكود على GitHub</a>
+      <a href="#overview">إلى الأعلى</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="web/r134a.js"></script>
+  <script src="web/engine.js"></script>
+  <script src="web/app.js"></script>
+</body>
+</html>

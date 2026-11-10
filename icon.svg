@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="HVAC Design Studio">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1a2e"/>
+      <stop offset="1" stop-color="#07101e"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="26" y="26" width="460" height="460" rx="92" fill="none" stroke="#2dd4bf" stroke-opacity="0.32" stroke-width="8"/>
+  <g fill="none" stroke="#2dd4bf" stroke-width="22" stroke-linecap="round">
+    <path d="M126 196h176a52 52 0 0 1 0 104H158"/>
+    <path d="M126 356h222"/>
+  </g>
+  <circle cx="376" cy="152" r="30" fill="#f6b74a"/>
+</svg>
