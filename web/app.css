@@ -1248,6 +1248,12 @@ button:focus-visible, a:focus-visible { outline-offset: 3px; }
   .capacity-line { align-items: flex-start; }
 }
 
+@media (max-width: 700px) {
+  .chart { overflow-x: auto; overflow-y: hidden; }
+  .chart svg { min-width: 580px; }
+  .chart-tooltip { display: none !important; }
+}
+
 @media (max-width: 560px) {
   body { font-size: 14px; }
   .live-chip span:last-child { display: none; }
